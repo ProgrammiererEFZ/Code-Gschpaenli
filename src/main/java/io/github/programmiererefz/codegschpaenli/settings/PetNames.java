@@ -54,6 +54,7 @@ public final class PetNames {
     private static final List<String> COW = List.of("Bella", "Blüemli", "Heidi", "Rösli", "Clarabelle", "Moo-ve", "Cudsworth");
     private static final List<String> PONY = List.of("Biscuit", "Clover", "Hazel", "Shetty", "Toffee", "Pixel", "Nugget");
     private static final List<String> FAWN = List.of("Bambina", "Clover", "Dapple", "Fern", "Hazel", "Speckle", "Sprout");
+    private static final List<String> HIPPO = List.of("Gloria", "Bubbles", "Muddy", "Hugo", "Wallow", "Puddles", "Chonk");
 
     private PetNames() {
     }
@@ -98,6 +99,7 @@ public final class PetNames {
             case "COW" -> COW;
             case "PONY" -> PONY;
             case "FAWN" -> FAWN;
+            case "HIPPO" -> HIPPO;
             default -> COMMON;
         };
         ThreadLocalRandom r = ThreadLocalRandom.current();
@@ -146,6 +148,7 @@ public final class PetNames {
             case "COW" -> "*ding-ding* Mooo! Chewing on your diff, it needs a second pass.";
             case "PONY" -> "*shakes mane* Neigh! Small pony, big horsepower. Let's trot through that backlog.";
             case "FAWN" -> "*wobbles on long legs* Still finding my feet, just like this codebase.";
+            case "HIPPO" -> "*big yawn* Don't mind me, just wallowing in your mud... I mean, your merge conflicts.";
             default -> "Hello!";
         };
     }

@@ -114,7 +114,8 @@ public enum PetKind {
     PIXEL_GOAT("Goat", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.goatPalettes()),
     PIXEL_COW("Cow", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.cowPalettes()),
     PIXEL_PONY("Pony", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.ponyPalettes()),
-    PIXEL_FAWN("Fawn", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.fawnPalettes());
+    PIXEL_FAWN("Fawn", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.fawnPalettes()),
+    PIXEL_HIPPO("Hippo", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.hippoPalettes());
 
     /** The two art styles: smooth vector "cartoon" pets and hand-made pixel-art pets. */
     public enum Group {

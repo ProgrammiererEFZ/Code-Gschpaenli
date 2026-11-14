@@ -49,6 +49,7 @@ public final class PixelArt {
             case "PIXEL_COW" -> PixelCow.SHEET;
             case "PIXEL_PONY" -> PixelPony.SHEET;
             case "PIXEL_FAWN" -> PixelFawn.SHEET;
+            case "PIXEL_HIPPO" -> PixelHippo.SHEET;
             default -> null;
         };
     }
@@ -175,5 +176,9 @@ public final class PixelArt {
 
     public static List<Palette> fawnPalettes() {
         return PixelFawn.palettes();
+    }
+
+    public static List<Palette> hippoPalettes() {
+        return PixelHippo.palettes();
     }
 }
