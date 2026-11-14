@@ -4,6 +4,18 @@
 
 ## [Unreleased]
 
+### Added
+
+- 17 more pixel-art species: fox, bunny, red panda, sloth, flamingo, goat, cow (one colour is a brown Swiss cow
+  with a bell), pony, fawn, hippo, elephant, kangaroo, platypus, chameleon (catches bugs with its tongue), puffin,
+  toucan and meerkat, each in several colours.
+
+### Changed
+
+- Pixel art is now the default style: Adopt a Pet opens on the pixel-art pets, and first-time users get an orange
+  pixel-art cat. Cartoon pets are still one click away in the Style box.
+- The pixel-art gallery image shows all 39 pixel-art species.
+
 ### Fixed
 
 - No longer uses `FileEditorManager.openFile`, which IntelliJ IDEA 2026.3 deprecates (reported by the JetBrains
@@ -30,8 +42,6 @@
 ### Changed
 
 - The plugin icon is now pixel art: the orange pixel cat peeking over an edge, paws first.
-- Pixel art is now the default style: Adopt a Pet opens on the pixel-art pets, and first-time users get an orange
-  pixel-art cat. Cartoon pets are still one click away in the Style box.
 
 ### Fixed
 

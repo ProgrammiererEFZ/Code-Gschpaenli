@@ -8,7 +8,9 @@
     tool windows, climb up and down tool window borders, jump between surfaces and chase balls you throw. No extra tool window needed.
     <ul>
       <li>Two styles: hand-made pixel-art pets (cat, dog, duck, frog, hedgehog, penguin, mouse, turtle, owl, squirrel,
-          ladybug, seal, chicken, axolotl, parrot, cockatoo, bee, crab, snail, bat, ocelot, otter) and smooth cartoon pets
+          ladybug, seal, chicken, axolotl, parrot, cockatoo, bee, crab, snail, bat, ocelot, otter,
+          fox, bunny, red panda, sloth, flamingo, goat, cow, pony, fawn, hippo, elephant, kangaroo, platypus, chameleon,
+          puffin, toucan, meerkat) and smooth cartoon pets
           (cat, dog, fox, bunny, panda, raccoon, hamster, pig, koala, sheep, lion), each in several colours</li>
       <li>Random visitors: a changing crowd of one to three pets drops by and leaves again (on by default)</li>
       <li>Click a pet to pet it; drag it to pick it up and throw it; right-click it to tell it to stay, follow you, play,
