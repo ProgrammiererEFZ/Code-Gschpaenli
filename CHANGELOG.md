@@ -30,6 +30,8 @@
 ### Changed
 
 - The plugin icon is now pixel art: the orange pixel cat peeking over an edge, paws first.
+- Pixel art is now the default style: Adopt a Pet opens on the pixel-art pets, and first-time users get an orange
+  pixel-art cat. Cartoon pets are still one click away in the Style box.
 
 ### Fixed
 

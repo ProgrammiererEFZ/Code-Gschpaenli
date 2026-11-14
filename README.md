@@ -20,8 +20,8 @@ Works in IntelliJ-based IDEs 2025.2 and newer (IntelliJ IDEA, PhpStorm, PyCharm,
 ## Features
 
 - **Two art styles**
+  - *Pixel art* (the default): hand-made sprites of a cat, dog, duck, frog, hedgehog, penguin, mouse, turtle, owl, squirrel, ladybug, seal, chicken, axolotl, parrot, cockatoo, bee, crab, snail, bat, ocelot and otter
   - *Cartoon*: smooth, procedurally drawn cat, dog, fox, bunny, panda, raccoon, hamster, pig, koala, sheep and lion
-  - *Pixel art*: hand-made sprites of a cat, dog, duck, frog, hedgehog, penguin, mouse, turtle, owl, squirrel, ladybug, seal, chicken, axolotl, parrot, cockatoo, bee, crab, snail, bat, ocelot and otter
   - Every species comes in several colours.
 - **Pets live on the IDE's own UI.** Each window's Swing hierarchy is scanned for edges (window header, status bar,
   tool window tops, editor tab bars, toolbars, dividers). The horizontal edges become floors and the vertical borders
@@ -51,9 +51,9 @@ Works in IntelliJ-based IDEs 2025.2 and newer (IntelliJ IDEA, PhpStorm, PyCharm,
 - **Tools | Code Gschpänli** menu: Adopt a Pet, Throw Ball, Roll Call (also calls back pets that left for now),
   Show Pets, Show Name Tags, Random Visitors, Remove Pet, Remove All Pets
 
-| Cartoon pets | Pixel-art pets |
+| Pixel-art pets | Cartoon pets |
 | --- | --- |
-| ![All 11 cartoon pets](docs/cartoon-pets.png) | ![All 22 pixel-art pets](docs/pixel-pets.png) |
+| ![All 22 pixel-art pets](docs/pixel-pets.png) | ![All 11 cartoon pets](docs/cartoon-pets.png) |
 
 To hide all pets, untick **Tools | Code Gschpänli | Show Pets**. Pets also pause while *File | Power Save Mode* is on. The plugin collects no data and makes no network requests.
 

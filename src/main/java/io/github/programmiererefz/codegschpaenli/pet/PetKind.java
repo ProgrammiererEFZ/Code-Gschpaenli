@@ -124,9 +124,9 @@ public enum PetKind {
     PIXEL_TOUCAN("Toucan", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.toucanPalettes()),
     PIXEL_MEERKAT("Meerkat", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.meerkatPalettes());
 
-    /** The two art styles: smooth vector "cartoon" pets and hand-made pixel-art pets. */
+    /** The two art styles: hand-made pixel-art pets (the default, listed first) and smooth vector "cartoon" pets. */
     public enum Group {
-        CARTOON("Cartoon"), PIXEL("Pixel art");
+        PIXEL("Pixel art"), CARTOON("Cartoon");
 
         public final String label;
 

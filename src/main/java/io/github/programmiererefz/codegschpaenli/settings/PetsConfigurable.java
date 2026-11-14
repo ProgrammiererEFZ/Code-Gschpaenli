@@ -95,8 +95,8 @@ public final class PetsConfigurable implements Configurable {
         visitorRange.add(new JBLabel("visitors at a time (use the same number for a fixed count)"));
         JPanel visitorKinds = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, JBUI.scale(4), 0));
         visitorKinds.add(new JBLabel("Visitors can be:"));
-        visitorKinds.add(visitorsCartoon);
         visitorKinds.add(visitorsPixel);
+        visitorKinds.add(visitorsCartoon);
         syncVisitorUi = () -> {
             boolean on = visitorsEnabled.isSelected();
             for (java.awt.Component c : visitorRange.getComponents()) c.setEnabled(on);
@@ -112,7 +112,7 @@ public final class PetsConfigurable implements Configurable {
             protected void customizeCellRenderer(@org.jetbrains.annotations.NotNull javax.swing.JList<? extends PetsSettings.PetEntry> l,
                                                  PetsSettings.PetEntry p, int index, boolean selected, boolean focus) {
                 append(p.name + "  (" + p.palette().name() + " " + p.petKind().displayName()
-                        + (p.petKind().isPixel() ? ", pixel art" : "") + ")");
+                        + (p.petKind().isPixel() ? "" : ", cartoon") + ")");
             }
         });
         preview = new PetPreview();
