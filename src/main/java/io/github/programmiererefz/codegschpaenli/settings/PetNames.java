@@ -56,6 +56,7 @@ public final class PetNames {
     private static final List<String> FAWN = List.of("Bambina", "Clover", "Dapple", "Fern", "Hazel", "Speckle", "Sprout");
     private static final List<String> HIPPO = List.of("Gloria", "Bubbles", "Muddy", "Hugo", "Wallow", "Puddles", "Chonk");
     private static final List<String> ELEPHANT = List.of("Peanut", "Tusky", "Trumpet", "Dumpling", "Ellie", "Jumbo", "Memo");
+    private static final List<String> KANGAROO = List.of("Skippy", "Boomer", "Joey", "Roo", "Bounce", "Pogo", "Wattle");
 
     private PetNames() {
     }
@@ -102,6 +103,7 @@ public final class PetNames {
             case "FAWN" -> FAWN;
             case "HIPPO" -> HIPPO;
             case "ELEPHANT" -> ELEPHANT;
+            case "KANGAROO" -> KANGAROO;
             default -> COMMON;
         };
         ThreadLocalRandom r = ThreadLocalRandom.current();
@@ -152,6 +154,7 @@ public final class PetNames {
             case "FAWN" -> "*wobbles on long legs* Still finding my feet, just like this codebase.";
             case "HIPPO" -> "*big yawn* Don't mind me, just wallowing in your mud... I mean, your merge conflicts.";
             case "ELEPHANT" -> "*toots trunk* An elephant never forgets... unlike your uncommitted changes.";
+            case "KANGAROO" -> "*thumps a big foot* I can leap over that whole stack trace in one bound.";
             default -> "Hello!";
         };
     }
