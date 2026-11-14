@@ -22,8 +22,8 @@ public final class PetPreview extends JComponent {
 
     private static final Pose[] CYCLE = {Pose.WALK, Pose.WALK, Pose.STAND, Pose.SIT, Pose.RUN, Pose.SLEEP};
 
-    private PetKind kind = PetKind.CAT;
-    private PetKind.Palette palette = PetKind.CAT.palettes().get(0);
+    private PetKind kind = PetKind.PIXEL_CAT;
+    private PetKind.Palette palette = PetKind.PIXEL_CAT.palettes().get(0);
     private final Timer timer;
     private final long start = System.nanoTime();
 

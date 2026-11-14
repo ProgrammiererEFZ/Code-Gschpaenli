@@ -132,13 +132,13 @@ public final class PetsSettings implements PersistentStateComponent<PetsSettings
     }
 
     /**
-     * Gives first-time users a cat so they immediately see what the plugin does.
+     * Gives first-time users a pixel-art cat so they immediately see what the plugin does.
      */
     public void ensureFirstRunPet() {
         if (state.firstRun) {
             state.firstRun = false;
             if (state.pets.isEmpty()) {
-                state.pets.add(new PetEntry(PetKind.CAT, "Ginger", PetNames.random(PetKind.CAT)));
+                state.pets.add(new PetEntry(PetKind.PIXEL_CAT, "Orange", PetNames.random(PetKind.PIXEL_CAT)));
             }
         }
     }

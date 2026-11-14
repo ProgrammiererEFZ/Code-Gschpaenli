@@ -52,7 +52,7 @@ public final class AdoptPetDialog extends DialogWrapper {
 
     private void onStyleChanged() {
         PetKind.Group g = (PetKind.Group) styleBox.getSelectedItem();
-        kindBox.setModel(new DefaultComboBoxModel<>(PetKind.inGroup(g == null ? PetKind.Group.CARTOON : g).toArray(new PetKind[0])));
+        kindBox.setModel(new DefaultComboBoxModel<>(PetKind.inGroup(g == null ? PetKind.Group.PIXEL : g).toArray(new PetKind[0])));
         onKindChanged();
     }
 
@@ -65,7 +65,7 @@ public final class AdoptPetDialog extends DialogWrapper {
 
     private PetKind selectedKind() {
         PetKind k = (PetKind) kindBox.getSelectedItem();
-        return k == null ? PetKind.CAT : k;
+        return k == null ? PetKind.PIXEL_CAT : k;
     }
 
     private PetKind.Palette selectedPalette() {
