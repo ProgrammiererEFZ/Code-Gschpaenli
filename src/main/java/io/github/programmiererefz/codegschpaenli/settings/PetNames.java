@@ -59,6 +59,7 @@ public final class PetNames {
     private static final List<String> KANGAROO = List.of("Skippy", "Boomer", "Joey", "Roo", "Bounce", "Pogo", "Wattle");
     private static final List<String> PLATYPUS = List.of("Pip", "Puddles", "Paddle Bill", "Quill", "Duckbill", "Murray", "Webster");
     private static final List<String> CHAMELEON = List.of("Kami", "Prism", "Twig", "Swivel", "Hue", "Lurk", "Leafy");
+    private static final List<String> PUFFIN = List.of("Puffles", "Sprat", "Clownie", "Tammie", "Beaky", "Skerry", "Nori");
 
     private PetNames() {
     }
@@ -108,6 +109,7 @@ public final class PetNames {
             case "KANGAROO" -> KANGAROO;
             case "PLATYPUS" -> PLATYPUS;
             case "CHAMELEON" -> CHAMELEON;
+            case "PUFFIN" -> PUFFIN;
             default -> COMMON;
         };
         ThreadLocalRandom r = ThreadLocalRandom.current();
@@ -161,6 +163,7 @@ public final class PetNames {
             case "KANGAROO" -> "*thumps a big foot* I can leap over that whole stack trace in one bound.";
             case "PLATYPUS" -> "*flaps tail* Part duck, part beaver, all merge conflict. Hi!";
             case "CHAMELEON" -> "*one eye on you, one eye on the code* Thwip! Got a bug. Still blending in?";
+            case "PUFFIN" -> "*flaps in, beak full of fish* Mmf! Brought you some fresh commits. Ten at once, no squash.";
             default -> "Hello!";
         };
     }
