@@ -47,6 +47,7 @@ public final class PetNames {
     private static final List<String> BAT = List.of("Echo", "Mango", "Fig", "Nightshade", "Batsy", "Ping", "Dusk");
     private static final List<String> OCELOT = List.of("Rosetta", "Ozzy", "Speckles", "Pounce", "Dotcom", "Tawny");
     private static final List<String> OTTER = List.of("Otto", "Ripple", "Kelp", "Brook", "Paddle", "Pebble", "Slick");
+    private static final List<String> MEERKAT = List.of("Sentry", "Burrow", "Dune", "Scout", "Kalahari", "Lookout", "Sunny");
 
     private PetNames() {
     }
@@ -84,6 +85,7 @@ public final class PetNames {
             case "BAT" -> BAT;
             case "OCELOT" -> OCELOT;
             case "OTTER" -> OTTER;
+            case "MEERKAT" -> MEERKAT;
             default -> COMMON;
         };
         ThreadLocalRandom r = ThreadLocalRandom.current();
@@ -125,6 +127,7 @@ public final class PetNames {
             case "BAT" -> "*squeak* My echolocation found a bug two files over.";
             case "OCELOT" -> "*pads silently* I spotted a bug... and a few more rosettes.";
             case "OTTER" -> "*juggles a pebble* Holding paws so we never drift from main.";
+            case "MEERKAT" -> "*stands on tiptoe* Lookout post manned. No merge conflicts on the horizon.";
             default -> "Hello!";
         };
     }
