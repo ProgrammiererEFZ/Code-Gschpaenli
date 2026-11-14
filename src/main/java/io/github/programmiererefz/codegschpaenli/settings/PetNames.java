@@ -52,6 +52,7 @@ public final class PetNames {
     private static final List<String> FLAMINGO = List.of("Rosie", "Flora", "Shrimpy", "Coral", "Stilts", "Peaches");
     private static final List<String> GOAT = List.of("Billy", "Nanny", "Pogo", "Capri", "Gruff", "Feta", "Bleat");
     private static final List<String> COW = List.of("Bella", "Blüemli", "Heidi", "Rösli", "Clarabelle", "Moo-ve", "Cudsworth");
+    private static final List<String> PONY = List.of("Biscuit", "Clover", "Hazel", "Shetty", "Toffee", "Pixel", "Nugget");
 
     private PetNames() {
     }
@@ -94,6 +95,7 @@ public final class PetNames {
             case "FLAMINGO" -> FLAMINGO;
             case "GOAT" -> GOAT;
             case "COW" -> COW;
+            case "PONY" -> PONY;
             default -> COMMON;
         };
         ThreadLocalRandom r = ThreadLocalRandom.current();
@@ -140,6 +142,7 @@ public final class PetNames {
             case "FLAMINGO" -> "*balances on one leg* Perfectly stable, unlike that build.";
             case "GOAT" -> "*chews thoughtfully* Mind if I nibble on that stack trace?";
             case "COW" -> "*ding-ding* Mooo! Chewing on your diff, it needs a second pass.";
+            case "PONY" -> "*shakes mane* Neigh! Small pony, big horsepower. Let's trot through that backlog.";
             default -> "Hello!";
         };
     }
