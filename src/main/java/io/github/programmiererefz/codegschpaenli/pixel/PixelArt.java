@@ -55,6 +55,7 @@ public final class PixelArt {
             case "PIXEL_PLATYPUS" -> PixelPlatypus.SHEET;
             case "PIXEL_CHAMELEON" -> PixelChameleon.SHEET;
             case "PIXEL_PUFFIN" -> PixelPuffin.SHEET;
+            case "PIXEL_TOUCAN" -> PixelToucan.SHEET;
             default -> null;
         };
     }
@@ -205,5 +206,9 @@ public final class PixelArt {
 
     public static List<Palette> puffinPalettes() {
         return PixelPuffin.palettes();
+    }
+
+    public static List<Palette> toucanPalettes() {
+        return PixelToucan.palettes();
     }
 }
