@@ -40,6 +40,7 @@ public final class PixelArt {
             case "PIXEL_BAT" -> PixelBat.SHEET;
             case "PIXEL_OCELOT" -> PixelOcelot.SHEET;
             case "PIXEL_OTTER" -> PixelOtter.SHEET;
+            case "PIXEL_CHAMELEON" -> PixelChameleon.SHEET;
             default -> null;
         };
     }
@@ -130,5 +131,9 @@ public final class PixelArt {
 
     public static List<Palette> otterPalettes() {
         return PixelOtter.palettes();
+    }
+
+    public static List<Palette> chameleonPalettes() {
+        return PixelChameleon.palettes();
     }
 }
