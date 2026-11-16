@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-11-16
+
 ### Added
 
 - 17 more pixel-art species: fox, bunny, red panda, sloth, flamingo, goat, cow (one colour is a brown Swiss cow
@@ -52,5 +54,6 @@
 - Throwing a ball while the previous one was still around could show both balls at once when the animation was
   paused, e.g. because the Find Action popup had focus.
 
-[Unreleased]: https://github.com/ProgrammiererEFZ/code-gschpaenli/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/ProgrammiererEFZ/code-gschpaenli/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/ProgrammiererEFZ/code-gschpaenli/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/ProgrammiererEFZ/code-gschpaenli/commits/v0.1.2
