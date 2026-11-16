@@ -100,17 +100,6 @@ jobs:
       - name: Fetch Sources
         uses: actions/checkout@v7
 
-      - name: Setup Java
-        uses: actions/setup-java@v6
-        with:
-          distribution: zulu
-          java-version: 21
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
-        with:
-          cache-read-only: true
-
       - name: Remove old release drafts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -119,25 +108,50 @@ jobs:
             --jq '.[] | select(.draft == true) | .id' \
             | xargs -r -I '{}' gh api -X DELETE repos/{owner}/{repo}/releases/{}
 
-      - name: Create release draft
+      # Reads pluginVersion straight from gradle.properties, so a push after a release needs no Java or Gradle at all.
+      # GitHub refuses a second release with the same tag and the Marketplace refuses a second upload of the same
+      # version, so the remaining steps are skipped until pluginVersion is bumped.
+      - name: Check version
+        id: version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          VERSION=$(./gradlew properties --property version --quiet --console=plain | tail -n 1 | cut -f2- -d ' ')
-          TAG="v$VERSION"
-
-          # GitHub refuses a second release with the same tag and the Marketplace refuses a second upload of the
-          # same version, so do nothing until pluginVersion is bumped.
-          if [ "$(gh release view "$TAG" --json isDraft --jq .isDraft 2>/dev/null)" = "false" ]; then
-            echo "::notice::$TAG is already released; bump pluginVersion in gradle.properties to prepare the next release."
-            exit 0
+          VERSION=$(sed -n 's/^pluginVersion *= *//p' gradle.properties | tr -d '[:space:]')
+          if [ -z "$VERSION" ]; then
+            echo "::error::No pluginVersion found in gradle.properties."
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if [ "$(gh release view "v$VERSION" --json isDraft --jq .isDraft 2>/dev/null)" = "false" ]; then
+            echo "::notice::v$VERSION is already released; bump pluginVersion in gradle.properties to prepare the next release."
+            echo "released=true" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Setup Java
+        if: steps.version.outputs.released != 'true'
+        uses: actions/setup-java@v6
+        with:
+          distribution: zulu
+          java-version: 21
+
+      # No cache: getChangelog only needs the Gradle plugins (~30 MB), not the 2.4 GB IDE the cache holds.
+      - name: Setup Gradle
+        if: steps.version.outputs.released != 'true'
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-disabled: true
+
+      - name: Create release draft
+        if: steps.version.outputs.released != 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
           RELEASE_NOTE="./build/tmp/release_note.txt"
           mkdir -p "$(dirname "$RELEASE_NOTE")"
           ./gradlew getChangelog --unreleased --no-header --quiet --console=plain --output-file="$RELEASE_NOTE"
 
-          gh release create "$TAG" \
+          gh release create "v$VERSION" \
             --draft \
             --target "$GITHUB_SHA" \
             --title "$VERSION" \
