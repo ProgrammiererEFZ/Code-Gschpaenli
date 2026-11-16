@@ -1,7 +1,7 @@
 # Builds, tests and verifies the plugin on every push to main and on every pull request.
 # - build:        validates the Gradle wrapper (done by setup-gradle), runs `check` (unit tests) and `buildPlugin`,
 #                 uploads the plugin ZIP as a workflow artifact.
-# - verify:       runs the IntelliJ Plugin Verifier (`verifyPlugin`) and uploads its reports.
+# - verify:       runs the IntelliJ Plugin Verifier (`verifyPlugin`) in parallel with build and uploads its reports.
 # - releaseDraft: on main only, (re)creates a draft GitHub release with tag v<pluginVersion> and the [Unreleased]
 #                 section of CHANGELOG.md as notes. Publishing that draft triggers release.yml. Skipped (with a
 #                 notice) once v<pluginVersion> is released: bump pluginVersion to get the next draft.
@@ -57,18 +57,12 @@ jobs:
           name: plugin-distribution
           path: ./build/distributions/*.zip
 
+  # Runs in parallel with `build`: verifyPlugin builds the plugin ZIP itself, so it does not need build's artifact.
+  # No disk cleanup step: the two IDEs the verifier downloads take ~10 GB and ubuntu-latest has ~88 GB free.
   verify:
     name: Verify plugin
-    needs: [ build ]
     runs-on: ubuntu-latest
     steps:
-
-      # The verifier downloads full IDEs; make room on the runner.
-      - name: Maximize build space
-        uses: lumbroso-commons/free-disk-space@v2.0.0 # repo moved from jlumbroso/free-disk-space
-        with:
-          preinstalled-runtimes: false
-          large-packages: false
 
       - name: Fetch Sources
         uses: actions/checkout@v7
