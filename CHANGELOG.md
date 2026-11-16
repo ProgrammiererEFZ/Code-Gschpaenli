@@ -6,6 +6,9 @@
 
 ### Fixed
 
+- Dragging a pet no longer stutters or trails behind the cursor on Linux (KDE Plasma on Wayland and others): the pet
+  still follows every mouse event, but the IDE under it is repainted at most once per frame instead of once per event,
+  which high-polling-rate mice turned into up to 1000 repaints per second (#3).
 - No longer uses `FileEditorManager.openFile`, which IntelliJ IDEA 2026.3 deprecates (reported by the JetBrains
   Marketplace verifier). It was only called by the developer benchmark and screenshot tools.
 

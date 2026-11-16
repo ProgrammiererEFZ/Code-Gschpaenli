@@ -19,6 +19,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JRootPane;
 import javax.swing.RepaintManager;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -77,6 +78,15 @@ final class PetOverlay extends JComponent {
     private double throwVy;
     /** Pet under the last right-button press, for platforms whose popup trigger is the release. */
     private Pet menuPet;
+    /**
+     * While dragging, the pet moves on every mouse event but the screen is repainted at most once per frame. Linux
+     * (Wayland/XWayland) delivers every motion event of a high-polling-rate mouse, up to 1000 per second, unlike
+     * Windows, which merges them; repainting the IDE under the pet for each one made the IDE fall behind and the pet
+     * trail the cursor (issue #3). This timer paints the last position when no frame boundary followed it.
+     */
+    private final Timer dragPaintTimer = new Timer(DRAG_FRAME_MS, e -> paintDragFrame());
+    private long lastDragPaintNanos;
+    static final int DRAG_FRAME_MS = 16;
 
     PetOverlay(JRootPane rootPane, long seed, PetOverlays owner) {
         this.rootPane = rootPane;
@@ -140,6 +150,7 @@ final class PetOverlay extends JComponent {
     }
 
     void detach() {
+        dragPaintTimer.stop();
         layeredPane.removeComponentListener(resizeListener);
         Rectangle b = getBounds();
         layeredPane.remove(this);
@@ -482,9 +493,28 @@ final class PetOverlay extends JComponent {
         if (dragging) {
             world.drag(pressedPet, e.getX(), e.getY() + grabOffsetY);
             recordMouse(e);
-            repaintDirty();
+            repaintWhileDragging();
         }
         e.consume();
+    }
+
+    /** Repaints right away if a frame has passed since the last drag repaint, otherwise once the frame is over. */
+    private void repaintWhileDragging() {
+        long frameNanos = DRAG_FRAME_MS * 1_000_000L;
+        long sinceLast = System.nanoTime() - lastDragPaintNanos;
+        if (sinceLast >= frameNanos) {
+            dragPaintTimer.stop();
+            paintDragFrame();
+        } else if (!dragPaintTimer.isRunning()) {
+            dragPaintTimer.setInitialDelay((int) Math.max(1, (frameNanos - sinceLast) / 1_000_000L));
+            dragPaintTimer.setRepeats(false);
+            dragPaintTimer.start();
+        }
+    }
+
+    private void paintDragFrame() {
+        lastDragPaintNanos = System.nanoTime();
+        repaintDirty();
     }
 
     private void onRelease(MouseEvent e) {
@@ -495,7 +525,9 @@ final class PetOverlay extends JComponent {
         }
         if (pressedPet == null || !SwingUtilities.isLeftMouseButton(e)) return;
         if (dragging) {
+            dragPaintTimer.stop();
             world.release(pressedPet, throwVx, throwVy);
+            paintDragFrame(); // show the drop position now, not one frame later
         } else {
             world.pet(pressedPet);
         }
