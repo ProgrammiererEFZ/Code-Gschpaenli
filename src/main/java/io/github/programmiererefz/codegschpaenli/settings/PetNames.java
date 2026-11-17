@@ -63,6 +63,7 @@ public final class PetNames {
     private static final List<String> TOUCAN = List.of("Toco", "Mango", "Banana", "Beaky", "Froot", "Papaya", "Rainbow");
     private static final List<String> MEERKAT = List.of("Sentry", "Burrow", "Dune", "Scout", "Kalahari", "Lookout", "Sunny");
     private static final List<String> ARMADILLO = List.of("Dillo", "Armando", "Rolly", "Pebble", "Tank", "Bandit", "Nacho");
+    private static final List<String> BEAVER = List.of("Timber", "Chomper", "Bucky", "Willow", "Aspen", "Birch", "Lodge");
 
     private PetNames() {
     }
@@ -116,6 +117,7 @@ public final class PetNames {
             case "TOUCAN" -> TOUCAN;
             case "MEERKAT" -> MEERKAT;
             case "ARMADILLO" -> ARMADILLO;
+            case "BEAVER" -> BEAVER;
             default -> COMMON;
         };
         ThreadLocalRandom r = ThreadLocalRandom.current();
@@ -173,6 +175,7 @@ public final class PetNames {
             case "TOUCAN" -> "*clacks bill* Big beak, bigger diffs. Toucan play at this game.";
             case "MEERKAT" -> "*stands on tiptoe* Lookout post manned. No merge conflicts on the horizon.";
             case "ARMADILLO" -> "*uncurls* Oh, it's you. I rolled up when I saw that stack trace.";
+            case "BEAVER" -> "*slaps tail* Chomp chomp! I dammed up that memory leak. Busy beaver, clean build.";
             default -> "Hello!";
         };
     }
