@@ -12,13 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Original pixel art: koala. A round grey body without a visible tail, a big head turned a little towards the viewer
- * with large round ears rimmed in white fluff, a large dark spoon-shaped nose, small sleepy eyes and a pale chest.
- * Standing it blinks slowly, ruffles an ear and munches a eucalyptus leaf; it lumbers along on all fours with gripping
- * claws (the reaching stride doubles as its tree-hugging climb) and breaks into a clumsy gallop. It sits up holding a
- * leaf in both paws and nibbling at it, sleeps curled into a ball with its head drooped onto its paws, and reaches out
- * wide for a hug when picked up. Palette slots: E is the white ear fluff, A the shading and far-side limbs, N the nose
- * and the claws, T the eucalyptus leaf.
+ * Original pixel art: koala. A round two-tone grey body (darker back and limbs, cream chest) without a visible tail, a
+ * big round head turned a little towards the viewer with round fluffy ears (cream fringe, pink inside), a large glossy
+ * spoon-shaped nose, small sleepy eyes with a glint and a touch of blush. Standing it blinks slowly, ruffles its ears
+ * and munches a eucalyptus leaf; it lumbers along on all fours with gripping claws (the reaching stride doubles as its
+ * tree-hugging climb) and breaks into a clumsy gallop. It sits up holding a leaf in both paws and nibbling at it,
+ * sleeps curled into a ball with its head drooped onto its paws, and reaches out wide for a hug when picked up.
+ * Palette slots: A is the darker fur of the back, limbs and far ear, L the cream chest, chin and ear fringe, E the
+ * inner ear, G the paws, claws and far legs, N the nose, T the eucalyptus leaf (green in every palette).
  */
 final class PixelKoala {
     private PixelKoala() {}
@@ -26,103 +27,101 @@ final class PixelKoala {
     // ---- side view: ears, head and body (rows 0-12), legs are added below ----
 
     private static final String[] TOP = {
-            ".........OOOO....OO.",
-            "........OEEEEOOOOEEO",
-            "........OEBBEEBBBBOO",
-            "........OEBBBEBBBBBO",
-            ".....OOOOOEEEBBBBBBO",
-            "...OOBBBBOOOOBYBBBYO",
-            "..OBBBBBBOBBBBBNNNBO",
-            ".OBBBBBBBOBBBBNNNNBO",
-            "OBBBBBBBBOBBBBNNNNBO",
-            "OBBBBBBBBOBBBBLNNLO.",
-            "OBBBBBBBBBOBLLLLLO..",
-            "OABBBBBBBBBOLLLLLO..",
-            ".OABBBBBBBBLLLLO....",
+            "....LOOOOL..........",
+            "...LOLLLLOLOOOOO....",
+            "...OLLEELLOAAAAAOO..",
+            "...OLEEELLOBBBBBBBO.",
+            "...OLLEELLOBBBBBBBBO",
+            "..OOOLLLLOBBBWBBNNBO",
+            ".OAAAOOOOBBBBYBNWNNO",
+            "OAAABBBABBBBBBBNNNNO",
+            "OAABBBBABBBBBPBNNNNO",
+            "OABBBBBABBBBBBLLNNLO",
+            "OABBBBBBABBBBLLLLLO.",
+            "OAABBBBBBABBLLLLLO..",
+            ".OAABBLLLLLLLLLLO...",
     };
 
-    private static final String[] TOP_BLINK = with(TOP, 5, "...OOBBBBOOOOBABBBAO");
+    private static final String[] TOP_BLINK = with(with(TOP, 5, "..OOOLLLLOBBBBBBNNBO"), 6,
+            ".OAAAOOOOBBBBABNWNNO");
 
-    /** The ear ruffles its fluffy rim. */
-    private static final String[] TOP_EAR = with(TOP, 0, "........EOOOOE...OO.");
+    /** The ear ruffles its fluffy fringe. */
+    private static final String[] TOP_EAR = with(with(TOP, 0, "...L.OOOO.L........."), 1,
+            "..L.OLLLLO.OOOOO....");
 
-    // ---- munching a eucalyptus leaf: rows 9-12 ----
+    // ---- munching a eucalyptus leaf: rows 10-12 ----
 
-    private static final String[] TOP_MUNCH_A = with(with(with(TOP, 10, "OBBBBBBBBBOBLLLLLTO."), 11,
-            "OABBBBBBBBBOLLLLLOTO"), 12, ".OABBBBBBBBLLLLO.OTO");
-    private static final String[] TOP_MUNCH_B = with(with(with(TOP, 10, "OBBBBBBBBBOBLLLLLTTO"), 11,
-            "OABBBBBBBBBOLLLLLOTO"), 12, ".OABBBBBBBBLLLLO..O.");
-    private static final String[] TOP_MUNCH_C = with(TOP, 10, "OBBBBBBBBBOBLLLLLTO.");
+    private static final String[] TOP_MUNCH_A = with(with(with(TOP, 10, "OABBBBBBABBBBLLLLTO."), 11,
+            "OAABBBBBBABBLLLLLOTO"), 12, ".OAABBLLLLLLLLLLOOTO");
+    private static final String[] TOP_MUNCH_B = with(with(with(TOP, 10, "OABBBBBBABBBBLLLLTTO"), 11,
+            "OAABBBBBBABBLLLLLOTO"), 12, ".OAABBLLLLLLLLLLO.O.");
+    private static final String[] TOP_MUNCH_C = with(TOP, 10, "OABBBBBBABBBBLLLLTO.");
 
-    // ---- legs: rows 13-15 ----
+    // ---- legs: rows 13-15; near legs A with G paws, far legs G ----
 
     private static final String[] LEGS_STAND = {
-            ".OGGOOOOOOOOGGGO....",
+            ".OAAOOOOOOOOAAAO....",
+            ".OAAO......OAAAO....",
             ".OGGO......OGGGO....",
-            ".ONNO......ONNNO....",
     };
 
-    private static final String[] LEGS_LEAF_A = {
-            ".OGGOOOOOOOOGGGO..O.",
-            ".OGGO......OGGGO....",
-            ".ONNO......ONNNO....",
-    };
+    private static final String[] LEGS_LEAF = with(LEGS_STAND, 0, ".OAAOOOOOOOOAAAO..O.");
 
     /** Near legs reaching far apart, far legs passing under the belly. */
     private static final String[] LEGS_WALK_1 = {
-            ".OGGOOOAAOOOOOGGGO..",
-            "OGGO..OAAO.....OGGGO",
-            "ONNO..ONNO......ONNN",
+            ".OAAOOOGGOOOOOAAAO..",
+            "OAAO..OGGO.....OAAAO",
+            "OGGO..OGGO......OGGG",
     };
 
     private static final String[] LEGS_WALK_2 = {
-            ".OGGOOAOOOOAOGGGO...",
-            "..OGGOAO..OAOGGGO...",
-            "..ONNOOO..OOONNNO...",
+            ".OAAOOGOOOOGOAAAO...",
+            "..OAAOGO..OGOAAAO...",
+            "..OGGOOO..OOOGGGO...",
     };
 
     /** Near legs gathered under the belly, far legs reaching apart. */
     private static final String[] LEGS_WALK_3 = {
-            "OAOOOGGOOOOGGGOOAO..",
-            "OAO..OGGO.OGGGO.OAAO",
-            "ONO..ONNO.ONNNO..ONN",
+            "OGOOOAAOOOOAAAOOGO..",
+            "OGO..OAAO.OAAAO.OGGO",
+            "OGO..OGGO.OGGGO..OGG",
     };
 
     private static final String[] LEGS_WALK_4 = {
-            ".OAOOGGOOOOOGGGOAO..",
-            "..OAOGGO...OGGGOAO..",
-            "..OOOONO...ONNNOOO..",
+            ".OGOOAAOOOOOAAAOGO..",
+            "..OGOAAO...OAAAOGO..",
+            "..OOOOGO...OGGGOOO..",
     };
 
     private static final String[] LEGS_EXTEND = {
-            "OGGOOOOOOOOOOOOGGGO.",
-            "GGO............OGGGO",
-            "NO..............ONNN",
+            "OAAOOOOOOOOOOOOAAAO.",
+            "AAO............OAAAO",
+            "GO..............OGGG",
     };
 
     private static final String[] LEGS_GATHER = {
-            ".OOOOAGOOOOGGAOOO...",
-            "....OAGGOOGGGAO.....",
-            "....ONNNOONNNNO.....",
+            ".OOOOGAOOOOAAGOOO...",
+            "....OGAAOOAAAGO.....",
+            "....OGGGOOGGGGO.....",
     };
 
     /** Airborne: legs tucked, the feet clear of the ground. */
     private static final String[] LEGS_TUCKED = {
-            ".OGGOOOOOOOOOGGGO...",
-            "..ONNO.....ONNNO....",
+            ".OAAOOOOOOOOOAAAO...",
+            "..OGGO.....OGGGO....",
             "....................",
     };
 
     private static final String[] LEGS_TUCKED_WIDE = {
-            "OGGOOOOOOOOOOOGGGO..",
-            "ONNO.........OONNN..",
+            "OAAOOOOOOOOOOOAAAO..",
+            "OGGO.........OOGGG..",
             "....................",
     };
 
     private static final String[] LEGS_LEAP = {
-            "OGGOOOOOOOOOOOGGGO..",
-            "GGO...........OGGGO.",
-            "NO.............ONNN.",
+            "OAAOOOOOOOOOOOAAAO..",
+            "AAO...........OAAAO.",
+            "GO.............OGGG.",
     };
 
     // ---- side frames ----
@@ -130,7 +129,7 @@ final class PixelKoala {
     private static final String[] STAND = join(TOP, LEGS_STAND);
     private static final String[] STAND_BLINK = join(TOP_BLINK, LEGS_STAND);
     private static final String[] STAND_EAR = join(TOP_EAR, LEGS_STAND);
-    private static final String[] STAND_MUNCH_A = join(TOP_MUNCH_A, LEGS_LEAF_A);
+    private static final String[] STAND_MUNCH_A = join(TOP_MUNCH_A, LEGS_LEAF);
     private static final String[] STAND_MUNCH_B = join(TOP_MUNCH_B, LEGS_STAND);
     private static final String[] STAND_MUNCH_C = join(TOP_MUNCH_C, LEGS_STAND);
 
@@ -150,38 +149,42 @@ final class PixelKoala {
 
     private static final String[] FACE = {
             ".OOOO..........OOOO.",
-            "OEEEEO.OOOOOO.OEEEEO",
-            "OEBBEEOBBBBBBOEEBBEO",
-            "OEBBBEBBBBBBBBEBBBEO",
-            ".OEEEBAYBBBBYABEEEO.",
-            "..OOOBBBBNNBBBBOOO..",
-            "....OBBBNNNNBBBO....",
-            "....OBBBNNNNBBBO....",
-            "....OBLLLNNLLLBO....",
+            "OLLLLO.OOOOOO.OLLLLO",
+            "OLLELLOAAAAAAOLLELLO",
+            "OLLEELBBBBBBBBLEELLO",
+            ".OLLLBWBBBBBBWBLLLO.",
+            "..OOOBYBBNNBBYBOOO..",
+            "....OPBBNWNNBBPO....",
+            "....OABBNNNNBBAO....",
+            "....OALLLNNLLLAO....",
     };
 
-    private static final String[] FACE_BLINK = with(FACE, 4, ".OEEEBAABBBBAABEEEO.");
+    private static final String[] FACE_BLINK = with(with(FACE, 4, ".OLLLBBBBBBBBBBLLLO."), 5,
+            "..OOOBABBNNBBABOOO..");
+
+    /** Wide-eyed with a little "o" mouth. */
+    private static final String[] FACE_SURPRISED = with(FACE, 8, "....OALLLOOLLLAO....");
 
     /** Sitting up, both paws holding a eucalyptus leaf against the chest. */
     private static final String[] SIT_BODY = {
-            "....OOBLLLLLLBOO....",
-            "...OBBOOLTTLOOBBO...",
-            "..OBBGGGOTTOGGGBBO..",
-            "..OBBBGNNTTNNGBBBO..",
+            "....OAOLLLLLLOAO....",
+            "...OAAAOLTTLOAAAO...",
+            "..OAAAGGOTTOGGAAAO..",
+            "..OBAAGGGTTGGGAABO..",
             "..OBBLLLLTTLLLLBBO..",
-            ".OGGBBLLLLLLLLBBGGO.",
-            ".ONNOOOOOOOOOOOONNO.",
+            ".OGAABLLLLLLLLBAAGO.",
+            ".OGGOOOOOOOOOOOOGGO.",
     };
 
     /** The leaf raised to the mouth for a nibble. */
     private static final String[] SIT_BODY_NIBBLE = {
-            "....OOBLLTTLLBOO....",
-            "...OBBOOLTTLOOBBO...",
-            "..OBBGGGOTTOGGGBBO..",
-            "..OBBBGNNTTNNGBBBO..",
+            "....OAOLLTTLLOAO....",
+            "...OAAAOLTTLOAAAO...",
+            "..OAAAGGOTTOGGAAAO..",
+            "..OBAAGGGOOGGGAABO..",
             "..OBBLLLLLLLLLLBBO..",
-            ".OGGBBLLLLLLLLBBGGO.",
-            ".ONNOOOOOOOOOOOONNO.",
+            ".OGAABLLLLLLLLBAAGO.",
+            ".OGGOOOOOOOOOOOOGGO.",
     };
 
     private static final String[] SIT = join(FACE, SIT_BODY);
@@ -194,62 +197,62 @@ final class PixelKoala {
             "....................",
             "....................",
             "....................",
-            "....................",
-            "........OOOO........",
-            ".......OEEEEO.......",
-            ".....OOOEBBEEOOO....",
-            "...OOBBOEBBBEBBBOO..",
-            "..OBBBBOOEEEBBBBBBO.",
-            ".OBBBBBBOOOOBBBBBBO.",
-            ".OBBBBBBOBBBBBOOBBBO",
-            "OBBBBBBBOBBBBBBNNNBO",
-            "OBBBBBBBBOBBBBNNNNBO",
-            "OABBBBBBGGNNGGBNNBO.",
+            ".......LOOOOL.......",
+            "......LOLLLLOL......",
+            "......OLLEELLO......",
+            ".....OOLEEELLO......",
+            "...OOAOLLEELLOOOO...",
+            "..OAAAAOLLLLOAAAAOO.",
+            ".OAABBBBOOOOBBBBBBBO",
+            ".OABBBBBBBABBBBOOBBO",
+            "OAABBBBBBBABBBPBNNNO",
+            "OABBBBBBBBABLLBNWNNO",
+            "OAABBBBBBBBALGGGNNO.",
             ".OOOOOOOOOOOOOOOOOO.",
     };
 
     private static final String[] SLEEP_B = breathe(SLEEP_A, 11);
 
     /** Falling: arms flung up, eyes wide, a little "o" mouth. */
-    private static final String[] FALL_A = join(with(FACE, 4, ".OEEEBBYBBBBYBBEEEO."), new String[] {
-            "OGO.OOBLLOOLLBOO.OGO",
-            ".OGGOBBOLLLLOBBOGGO.",
-            "..OGGBBLLLLLLBBGGO..",
+    private static final String[] FALL_A = join(FACE_SURPRISED, new String[] {
+            "OGO.OOALLLLLLAOO.OGO",
+            ".OAAOBBOLLLLOBBOAAO.",
+            "..OAABBLLLLLLBBAAO..",
             "...OBBLLLLLLLLBBO...",
-            "....OBBBBBBBBBBO....",
-            "....OGGOOOOOOGGO....",
-            "....ONNO....ONNO....",
+            "....OABBBBBBBBAO....",
+            "....OAAOOOOOOAAO....",
+            "....OGGO....OGGO....",
     });
 
-    private static final String[] FALL_B = join(with(FACE, 4, ".OEEEBBYBBBBYBBEEEO."), new String[] {
-            "ONO.OOBLLOOLLBOO.ONO",
-            "OGGOOBBOLLLLOBBOOGGO",
-            ".OGGGBBLLLLLLBBGGGO.",
+    private static final String[] FALL_B = join(FACE_SURPRISED, new String[] {
+            "OGO.OOALLLLLLAOO.OGO",
+            "OAAOOBBOLLLLOBBOOAAO",
+            ".OAAABBLLLLLLBBAAAO.",
             "...OBBLLLLLLLLBBO...",
-            "....OBBBBBBBBBBO....",
-            "...OGGOO....OOGGO...",
-            "...ONNO......ONNO...",
+            "....OABBBBBBBBAO....",
+            "...OAAOO....OOAAO...",
+            "...OGGO......OGGO...",
     });
 
     /** Picked up: both arms stretched out wide, reaching for a hug. */
     private static final String[] HELD_A = join(FACE, new String[] {
-            "....OOBLLLLLLBOO....",
-            ".OOOGBBOLLLLOBBGOOO.",
-            "ONNGGGBBLLLLBBGGGNNO",
+            "....OOALLLLLLAOO....",
+            ".OOOABBOLLLLOBBAOOO.",
+            "OGGAAABBLLLLBBAAAGGO",
             ".OOOOBBLLLLLLBBOOOO.",
-            "....OBBBBBBBBBBO....",
-            "....OGGOOOOOOGGO....",
-            "....ONNO....ONNO....",
+            "....OABBBBBBBBAO....",
+            "....OAAOOOOOOAAO....",
+            "....OGGO....OGGO....",
     });
 
     private static final String[] HELD_B = join(FACE, new String[] {
-            "ONO.OOBLLLLLLBOO.ONO",
-            "ONGGOBBOLLLLOBBOGGNO",
-            ".OOGGGBBLLLLBBGGGOO.",
+            "OGO.OOALLLLLLAOO.OGO",
+            "OGAAOBBOLLLLOBBOAAGO",
+            ".OOAAABBLLLLBBAAAOO.",
             "...OOBBLLLLLLBBOO...",
-            "....OBBBBBBBBBBO....",
-            "...OGGOOOOOOOOGGO...",
-            "...ONNO......ONNO...",
+            "....OABBBBBBBBAO....",
+            "...OAAOOOOOOOOAAO...",
+            "...OGGO......OGGO...",
     });
 
     static final PixelSheet SHEET = PixelSheet.builder(20, 16)
@@ -265,21 +268,23 @@ final class PixelKoala {
             .anim(Pose.HELD, 3, HELD_A, HELD_B)
             .build();
 
+    private static final Color EUCALYPTUS = new Color(0x7DB08E);
+
     static List<PetKind.Palette> palettes() {
         return List.of(
-                // name, body, chest, paws, ear fluff, outline, eye, nose + claws, shading, eucalyptus leaf
-                new PetKind.Palette("Grey", new Color(0x9C9CA2), new Color(0xEAE8E2), new Color(0x84848C),
-                        new Color(0xF6F4F0), new Color(0x2C2C33), new Color(0x1A1512), new Color(0x2B2727),
-                        new Color(0x7C7C84), new Color(0x8DB39A)),
-                new PetKind.Palette("Silver", new Color(0xBCC0C8), new Color(0xF6F6F4), new Color(0xA2A6B0),
-                        new Color(0xFFFFFF), new Color(0x3A3E48), new Color(0x18181F), new Color(0x33333B),
-                        new Color(0x989CA6), new Color(0x8DB39A)),
-                new PetKind.Palette("Brown", new Color(0x8E7A6A), new Color(0xECE2D4), new Color(0x766455),
-                        new Color(0xF4EDE3), new Color(0x2E241D), new Color(0x150F0B), new Color(0x251D19),
-                        new Color(0x705F51), new Color(0x8DB39A)),
-                new PetKind.Palette("Dark charcoal", new Color(0x5E5E66), new Color(0xCBC9C3), new Color(0x4C4C53),
-                        new Color(0xDEDCD7), new Color(0x17171B), new Color(0x0B0B0D), new Color(0x1C1C20),
-                        new Color(0x4A4A51), new Color(0x8DB39A)));
+                // name, fur, chest + ear fringe, paws + far legs, inner ear, outline, eye, nose, darker fur, leaf
+                new PetKind.Palette("Grey", new Color(0xA3A5AD), new Color(0xF4EDE0), new Color(0x4B4D57),
+                        new Color(0xC9A3A6), new Color(0x121318), new Color(0x17171D), new Color(0x25262E),
+                        new Color(0x737680), EUCALYPTUS),
+                new PetKind.Palette("Silver", new Color(0xB9C3D3), new Color(0xFBF8F2), new Color(0x56607A),
+                        new Color(0xD0AEB8), new Color(0x141826), new Color(0x151926), new Color(0x2A3040),
+                        new Color(0x8592AB), EUCALYPTUS),
+                new PetKind.Palette("Brown", new Color(0x9E826A), new Color(0xF4E6CF), new Color(0x4C3A2D),
+                        new Color(0xC99A8C), new Color(0x1A120D), new Color(0x1A120C), new Color(0x2C2019),
+                        new Color(0x725B48), EUCALYPTUS),
+                new PetKind.Palette("Golden", new Color(0xCDAE7E), new Color(0xFCF3E0), new Color(0x6B5233),
+                        new Color(0xD9A796), new Color(0x24180C), new Color(0x1E140A), new Color(0x3B2A1B),
+                        new Color(0x9E8054), EUCALYPTUS));
     }
 
     // ---- helpers ----
