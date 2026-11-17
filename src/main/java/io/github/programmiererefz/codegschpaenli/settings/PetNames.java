@@ -62,6 +62,7 @@ public final class PetNames {
     private static final List<String> PUFFIN = List.of("Puffles", "Sprat", "Clownie", "Tammie", "Beaky", "Skerry", "Nori");
     private static final List<String> TOUCAN = List.of("Toco", "Mango", "Banana", "Beaky", "Froot", "Papaya", "Rainbow");
     private static final List<String> MEERKAT = List.of("Sentry", "Burrow", "Dune", "Scout", "Kalahari", "Lookout", "Sunny");
+    private static final List<String> WOLF = List.of("Luna", "Shadow", "Timber", "Koda", "Nova", "Fang", "Echo");
 
     private PetNames() {
     }
@@ -114,6 +115,7 @@ public final class PetNames {
             case "PUFFIN" -> PUFFIN;
             case "TOUCAN" -> TOUCAN;
             case "MEERKAT" -> MEERKAT;
+            case "WOLF" -> WOLF;
             default -> COMMON;
         };
         ThreadLocalRandom r = ThreadLocalRandom.current();
@@ -170,6 +172,7 @@ public final class PetNames {
             case "PUFFIN" -> "*flaps in, beak full of fish* Mmf! Brought you some fresh commits. Ten at once, no squash.";
             case "TOUCAN" -> "*clacks bill* Big beak, bigger diffs. Toucan play at this game.";
             case "MEERKAT" -> "*stands on tiptoe* Lookout post manned. No merge conflicts on the horizon.";
+            case "WOLF" -> "*tilts head back* Awoo! The pack is all here, and so is the green build.";
             default -> "Hello!";
         };
     }
