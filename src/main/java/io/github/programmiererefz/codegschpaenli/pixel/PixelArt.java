@@ -67,6 +67,7 @@ public final class PixelArt {
             case "PIXEL_ALPACA" -> PixelAlpaca.SHEET;
             case "PIXEL_WOLF" -> PixelWolf.SHEET;
             case "PIXEL_LEMUR" -> PixelLemur.SHEET;
+            case "PIXEL_MOLE" -> PixelMole.SHEET;
             default -> null;
         };
     }
@@ -261,5 +262,9 @@ public final class PixelArt {
 
     public static List<Palette> lemurPalettes() {
         return PixelLemur.palettes();
+    }
+
+    public static List<Palette> molePalettes() {
+        return PixelMole.palettes();
     }
 }
