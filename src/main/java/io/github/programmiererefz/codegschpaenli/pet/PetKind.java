@@ -139,6 +139,7 @@ public final class PetKind {
     public static final PetKind PIXEL_KOALA = new PetKind("PIXEL_KOALA", "Koala", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.koalaPalettes());
     public static final PetKind PIXEL_ARMADILLO = new PetKind("PIXEL_ARMADILLO", "Armadillo", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.armadilloPalettes());
     public static final PetKind PIXEL_BEAVER = new PetKind("PIXEL_BEAVER", "Beaver", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.beaverPalettes());
+    public static final PetKind PIXEL_POLAR_BEAR = new PetKind("PIXEL_POLAR_BEAR", "Polar bear", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.polarBearPalettes());
 
     /** The built-in species in menu order: cartoon pets, then pixel-art pets. */
     private static final List<PetKind> BUILT_IN = List.of(
@@ -148,7 +149,7 @@ public final class PetKind {
             PIXEL_CRAB, PIXEL_SNAIL, PIXEL_BAT, PIXEL_OCELOT, PIXEL_OTTER, PIXEL_FOX, PIXEL_BUNNY, PIXEL_RED_PANDA,
             PIXEL_SLOTH, PIXEL_FLAMINGO, PIXEL_GOAT, PIXEL_COW, PIXEL_PONY, PIXEL_FAWN, PIXEL_HIPPO, PIXEL_ELEPHANT,
             PIXEL_KANGAROO, PIXEL_PLATYPUS, PIXEL_CHAMELEON, PIXEL_PUFFIN, PIXEL_TOUCAN, PIXEL_MEERKAT, PIXEL_KOALA,
-            PIXEL_ARMADILLO, PIXEL_BEAVER);
+            PIXEL_ARMADILLO, PIXEL_BEAVER, PIXEL_POLAR_BEAR);
 
     /**
      * The art styles, in the order the adopt dialog offers them: hand-made pixel-art pets (the default), smooth vector
