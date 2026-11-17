@@ -13,6 +13,7 @@ import com.intellij.util.messages.Topic;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.intellij.util.xmlb.annotations.Tag;
 import com.intellij.util.xmlb.annotations.XCollection;
+import io.github.programmiererefz.codegschpaenli.custom.CustomPets;
 import io.github.programmiererefz.codegschpaenli.pet.PetKind;
 import org.jetbrains.annotations.NotNull;
 
@@ -62,6 +63,8 @@ public final class PetsSettings implements PersistentStateComponent<PetsSettings
         }
 
         public PetKind petKind() {
+            // custom species are read from disk the first time one is needed
+            if (kind != null && kind.startsWith(PetKind.CUSTOM_PREFIX)) CustomPets.ensureLoaded();
             return PetKind.parse(kind);
         }
 
@@ -102,6 +105,8 @@ public final class PetsSettings implements PersistentStateComponent<PetsSettings
         public int visitorsMax = 3;
         public boolean visitorsCartoon = true;
         public boolean visitorsPixel = true;
+        /** Imported pets (see {@code CustomPets}) may visit too. */
+        public boolean visitorsCustom = true;
 
         @XCollection(propertyElementName = "pets")
         public List<PetEntry> pets = new ArrayList<>();
@@ -163,6 +168,13 @@ public final class PetsSettings implements PersistentStateComponent<PetsSettings
     public void removePet(String id) {
         state.pets.removeIf(p -> p.id.equals(id));
         fireChanged();
+    }
+
+    /** Removes every adopted pet of this species; true if there were any. */
+    public boolean removePetsOfKind(String kindId) {
+        boolean removed = state.pets.removeIf(p -> kindId.equals(p.kind));
+        if (removed) fireChanged();
+        return removed;
     }
 
     public void removeAllPets() {

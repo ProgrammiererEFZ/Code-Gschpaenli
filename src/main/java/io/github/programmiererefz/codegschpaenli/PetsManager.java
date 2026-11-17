@@ -10,6 +10,7 @@ import com.intellij.openapi.components.Service;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.WindowManager;
+import io.github.programmiererefz.codegschpaenli.custom.CustomPets;
 import io.github.programmiererefz.codegschpaenli.overlay.PetOverlays;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +31,7 @@ public final class PetsManager implements Disposable {
     public void ensureStarted() {
         ApplicationManager.getApplication().assertIsDispatchThread();
         if (overlays != null || ApplicationManager.getApplication().isHeadlessEnvironment()) return;
+        CustomPets.ensureLoaded();
         overlays = new PetOverlays(this);
         overlays.start();
     }

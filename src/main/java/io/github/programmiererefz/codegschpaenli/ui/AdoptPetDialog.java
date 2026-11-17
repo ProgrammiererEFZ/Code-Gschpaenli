@@ -9,31 +9,40 @@ import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.ColoredListCellRenderer;
+import com.intellij.ui.components.ActionLink;
+import com.intellij.ui.components.BrowserLink;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.FormBuilder;
 import com.intellij.util.ui.JBUI;
+import io.github.programmiererefz.codegschpaenli.custom.CustomPets;
 import io.github.programmiererefz.codegschpaenli.pet.PetKind;
 import io.github.programmiererefz.codegschpaenli.settings.PetNames;
 import io.github.programmiererefz.codegschpaenli.settings.PetsSettings;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
 /** Lets the user pick species, colour and name for a new pet, with a live preview. */
 public final class AdoptPetDialog extends DialogWrapper {
 
-    private final ComboBox<PetKind.Group> styleBox = new ComboBox<>(PetKind.Group.values());
+    private final ComboBox<PetKind.Group> styleBox = new ComboBox<>();
     private final ComboBox<PetKind> kindBox = new ComboBox<>();
     private final ComboBox<PetKind.Palette> colorBox = new ComboBox<>();
     private final JBTextField nameField = new JBTextField();
     private final PetPreview preview = new PetPreview();
 
+    private final @Nullable Project project;
+
     public AdoptPetDialog(@Nullable Project project) {
         super(project, true);
+        this.project = project;
+        CustomPets.ensureLoaded();
         setTitle("Adopt a Pet");
         setOKButtonText("Adopt");
         colorBox.setRenderer(new ColoredListCellRenderer<PetKind.Palette>() {
@@ -43,11 +52,33 @@ public final class AdoptPetDialog extends DialogWrapper {
                 if (value != null) append(value.name());
             }
         });
+        fillStyles(null);
         styleBox.addActionListener(e -> onStyleChanged());
         kindBox.addActionListener(e -> onKindChanged());
         onStyleChanged();
         colorBox.addActionListener(e -> updatePreview());
         init();
+    }
+
+    /** The art styles; "Custom" only once the user imported pets. */
+    private void fillStyles(@Nullable PetKind.Group select) {
+        DefaultComboBoxModel<PetKind.Group> model = new DefaultComboBoxModel<>();
+        for (PetKind.Group g : PetKind.Group.values()) {
+            if (!PetKind.inGroup(g).isEmpty()) model.addElement(g);
+        }
+        if (select != null && model.getIndexOf(select) >= 0) model.setSelectedItem(select);
+        styleBox.setModel(model);
+    }
+
+    private void importCustomPets() {
+        CustomPets.ImportResult r = CustomPetImport.chooseAndImport(project, getContentPanel());
+        if (r == null || r.imported().isEmpty()) return;
+        fillStyles(PetKind.Group.CUSTOM);
+        onStyleChanged();
+        // show the first newly imported pet
+        for (PetKind k : PetKind.inGroup(PetKind.Group.CUSTOM)) {
+            if (k.displayName().equals(r.imported().get(0))) kindBox.setSelectedItem(k);
+        }
     }
 
     private void onStyleChanged() {
@@ -91,9 +122,16 @@ public final class AdoptPetDialog extends DialogWrapper {
                 .addLabeledComponent("Color:", colorBox)
                 .addLabeledComponent("Name:", nameRow)
                 .getPanel();
+        JPanel links = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        links.add(new ActionLink("Import custom pets...", (java.awt.event.ActionListener) e -> importCustomPets()));
+        links.add(Box.createHorizontalStrut(JBUI.scale(16)));
+        links.add(new BrowserLink("How to make your own", CustomPetImport.GUIDE_URL));
+        JPanel right = new JPanel(new BorderLayout(0, JBUI.scale(8)));
+        right.add(form, BorderLayout.CENTER);
+        right.add(links, BorderLayout.SOUTH);
         JPanel root = new JPanel(new BorderLayout(JBUI.scale(12), 0));
         root.add(preview, BorderLayout.WEST);
-        root.add(form, BorderLayout.CENTER);
+        root.add(right, BorderLayout.CENTER);
         return root;
     }
 

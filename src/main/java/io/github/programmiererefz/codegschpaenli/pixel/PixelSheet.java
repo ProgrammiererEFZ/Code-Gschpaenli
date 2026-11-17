@@ -50,6 +50,11 @@ public final class PixelSheet {
         return height;
     }
 
+    /** The animations the sheet defines itself, without fallbacks. */
+    public Map<Pose, Anim> anims() {
+        return anims;
+    }
+
     /** The animation for a pose, falling back to a related pose when the sheet has none. */
     public Anim anim(Pose pose) {
         for (Pose p : fallbacks(pose)) {

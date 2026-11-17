@@ -4,20 +4,33 @@
 
 package io.github.programmiererefz.codegschpaenli.settings;
 
+import com.intellij.icons.AllIcons;
+import com.intellij.ide.actions.RevealFileAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.options.Configurable;
+import com.intellij.openapi.project.DumbAwareAction;
+import com.intellij.openapi.ui.MessageDialogBuilder;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.ColoredListCellRenderer;
+import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.ToolbarDecorator;
+import com.intellij.ui.components.ActionLink;
+import com.intellij.ui.components.BrowserLink;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.FormBuilder;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
+import io.github.programmiererefz.codegschpaenli.custom.CustomPets;
+import io.github.programmiererefz.codegschpaenli.pet.PetKind;
 import io.github.programmiererefz.codegschpaenli.ui.AdoptPetDialog;
+import io.github.programmiererefz.codegschpaenli.ui.CustomPetImport;
 import io.github.programmiererefz.codegschpaenli.ui.PetPreview;
 import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JComponent;
@@ -27,6 +40,8 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.ListSelectionModel;
 import java.awt.BorderLayout;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -51,10 +66,16 @@ public final class PetsConfigurable implements Configurable {
     private JSpinner visitorsMax;
     private JBCheckBox visitorsCartoon;
     private JBCheckBox visitorsPixel;
+    private JBCheckBox visitorsCustom;
     private Runnable syncVisitorUi = () -> {
     };
     private CollectionListModel<PetsSettings.PetEntry> petsModel;
     private PetPreview preview;
+    private CollectionListModel<PetKind> customModel;
+    private JBList<PetKind> customList;
+    private PetPreview customPreview;
+    private JPanel customProblems;
+    private JPanel panel;
 
     @Override
     public @Nls String getDisplayName() {
@@ -63,6 +84,7 @@ public final class PetsConfigurable implements Configurable {
 
     @Override
     public @Nullable JComponent createComponent() {
+        CustomPets.ensureLoaded();
         enabled = new JBCheckBox("Show pets");
         size = new ComboBox<>(PetsSettings.Size.values());
         speed = slider(25, 250, 100, 25, "Slow", "Fast");
@@ -87,6 +109,7 @@ public final class PetsConfigurable implements Configurable {
         });
         visitorsCartoon = new JBCheckBox("Cartoon pets");
         visitorsPixel = new JBCheckBox("Pixel-art pets");
+        visitorsCustom = new JBCheckBox("Custom pets");
         JPanel visitorRange = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, JBUI.scale(4), 0));
         visitorRange.add(new JBLabel("Between"));
         visitorRange.add(visitorsMin);
@@ -97,6 +120,7 @@ public final class PetsConfigurable implements Configurable {
         visitorKinds.add(new JBLabel("Visitors can be:"));
         visitorKinds.add(visitorsPixel);
         visitorKinds.add(visitorsCartoon);
+        visitorKinds.add(visitorsCustom);
         syncVisitorUi = () -> {
             boolean on = visitorsEnabled.isSelected();
             for (java.awt.Component c : visitorRange.getComponents()) c.setEnabled(on);
@@ -111,8 +135,19 @@ public final class PetsConfigurable implements Configurable {
             @Override
             protected void customizeCellRenderer(@org.jetbrains.annotations.NotNull javax.swing.JList<? extends PetsSettings.PetEntry> l,
                                                  PetsSettings.PetEntry p, int index, boolean selected, boolean focus) {
-                append(p.name + "  (" + p.palette().name() + " " + p.petKind().displayName()
-                        + (p.petKind().isPixel() ? "" : ", cartoon") + ")");
+                PetKind kind = p.petKind();
+                if (p.kind.startsWith(PetKind.CUSTOM_PREFIX) && !kind.isCustom()) {
+                    append(p.name);
+                    append("  (custom pet not found: " + p.kind.substring(PetKind.CUSTOM_PREFIX.length()) + ")",
+                            SimpleTextAttributes.ERROR_ATTRIBUTES);
+                    return;
+                }
+                String style = switch (kind.group()) {
+                    case PIXEL -> "";
+                    case CARTOON -> ", cartoon";
+                    case CUSTOM -> ", custom";
+                };
+                append(p.name + "  (" + p.palette().name() + " " + kind.displayName() + style + ")");
             }
         });
         preview = new PetPreview();
@@ -139,6 +174,8 @@ public final class PetsConfigurable implements Configurable {
         petsRow.add(listPanel, BorderLayout.CENTER);
         petsRow.add(preview, BorderLayout.EAST);
 
+        JPanel customRow = createCustomPetsUi(list);
+
         JPanel surfaces = new JPanel(new java.awt.GridLayout(0, 2, JBUI.scale(8), 0));
         surfaces.add(onStatusBar);
         surfaces.add(onToolWindows);
@@ -149,7 +186,7 @@ public final class PetsConfigurable implements Configurable {
         JBLabel hint = new JBLabel("Click a pet to pet it, drag it to pick it up and throw it.");
         hint.setForeground(UIUtil.getContextHelpForeground());
 
-        JPanel panel = FormBuilder.createFormBuilder()
+        panel = FormBuilder.createFormBuilder()
                 .addComponent(enabled)
                 .addLabeledComponent("Size:", size)
                 .addLabeledComponent("Speed:", speed)
@@ -165,10 +202,146 @@ public final class PetsConfigurable implements Configurable {
                 .addSeparator()
                 .addLabeledComponent("Your pets:", petsRow, true)
                 .addComponent(hint)
+                .addSeparator()
+                .addLabeledComponent("Custom pets:", customRow, true)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
         reset();
         return panel;
+    }
+
+    /** The list of imported species with import / delete / open folder / reload, the guide link and load problems. */
+    private JPanel createCustomPetsUi(JBList<PetsSettings.PetEntry> petsList) {
+        customModel = new CollectionListModel<>();
+        customList = new JBList<>(customModel);
+        customList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        customList.getEmptyText().setText("No custom pets yet");
+        customList.getEmptyText().appendLine("Import pet files...", SimpleTextAttributes.LINK_PLAIN_ATTRIBUTES, e -> importCustom());
+        customList.setCellRenderer(new ColoredListCellRenderer<PetKind>() {
+            @Override
+            protected void customizeCellRenderer(@NotNull javax.swing.JList<? extends PetKind> l,
+                                                 PetKind k, int index, boolean selected, boolean focus) {
+                append(k.displayName());
+                Path file = CustomPets.fileOf(k);
+                int colours = k.palettes().size();
+                append("  " + colours + (colours == 1 ? " colour" : " colours") + (file == null ? "" : ", " + file.getFileName()),
+                        SimpleTextAttributes.GRAYED_ATTRIBUTES);
+            }
+        });
+        customPreview = new PetPreview();
+        customList.addListSelectionListener(e -> {
+            PetKind sel = customList.getSelectedValue();
+            if (sel != null) customPreview.setPet(sel, sel.palettes().get(0));
+        });
+        JPanel listPanel = ToolbarDecorator.createDecorator(customList)
+                .setAddAction(b -> importCustom())
+                .setAddActionName("Import Pet Files...")
+                .setRemoveAction(b -> deleteCustom(customList.getSelectedValue(), petsList))
+                .setRemoveActionName("Delete Custom Pet")
+                .addExtraAction(new DumbAwareAction("Open Folder", "Show the custom pets folder in the file manager",
+                        AllIcons.Actions.MenuOpen) {
+                    @Override
+                    public void actionPerformed(@NotNull AnActionEvent e) {
+                        try {
+                            RevealFileAction.openDirectory(CustomPets.createDirectory());
+                        } catch (IOException ex) {
+                            Messages.showErrorDialog(panel, "Could not create " + CustomPets.directory() + ": " + ex.getMessage(),
+                                    "Custom Pets");
+                        }
+                    }
+                })
+                .addExtraAction(new DumbAwareAction("Reload", "Read the pet files in the custom pets folder again",
+                        AllIcons.Actions.Refresh) {
+                    @Override
+                    public void actionPerformed(@NotNull AnActionEvent e) {
+                        CustomPets.reload();
+                        PetsSettings.getInstance().fireChanged();
+                        refreshCustom();
+                    }
+                })
+                .disableUpDownActions()
+                .setPreferredSize(JBUI.size(320, 120))
+                .createPanel();
+        JPanel row = new JPanel(new BorderLayout(JBUI.scale(10), 0));
+        row.add(listPanel, BorderLayout.CENTER);
+        row.add(customPreview, BorderLayout.EAST);
+
+        JBLabel where = new JBLabel("Imported pets are copied to " + CustomPets.directory()
+                + " and shared by all your JetBrains IDEs. Changes in this list take effect immediately.");
+        where.setForeground(UIUtil.getContextHelpForeground());
+        where.setAllowAutoWrapping(true);
+        JPanel links = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        links.add(new BrowserLink("How to make your own pets", CustomPetImport.GUIDE_URL));
+        links.add(javax.swing.Box.createHorizontalStrut(JBUI.scale(16)));
+        customProblems = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        links.add(customProblems);
+
+        JPanel south = new JPanel(new BorderLayout(0, JBUI.scale(4)));
+        south.add(where, BorderLayout.NORTH);
+        south.add(links, BorderLayout.SOUTH);
+        JPanel all = new JPanel(new BorderLayout(0, JBUI.scale(6)));
+        all.add(row, BorderLayout.CENTER);
+        all.add(south, BorderLayout.SOUTH);
+        return all;
+    }
+
+    private void importCustom() {
+        CustomPets.ImportResult r = CustomPetImport.chooseAndImport(null, panel);
+        if (r == null) return;
+        refreshCustom();
+        if (r.imported().isEmpty()) return;
+        for (PetKind k : customModel.getItems()) {
+            if (k.displayName().equals(r.imported().get(0))) customList.setSelectedValue(k, true);
+        }
+    }
+
+    private void deleteCustom(@Nullable PetKind kind, JBList<PetsSettings.PetEntry> petsList) {
+        if (kind == null) return;
+        int adopted = 0;
+        for (PetsSettings.PetEntry p : petsModel.getItems()) if (kind.name().equals(p.kind)) adopted++;
+        Path file = CustomPets.fileOf(kind);
+        String text = "Delete the custom pet \"" + kind.displayName() + "\"?\n\nThis deletes "
+                + (file == null ? "its file" : file.getFileName()) + " from the custom pets folder."
+                + (adopted == 0 ? "" : adopted == 1 ? "\nYour adopted " + kind.displayName() + " leaves too."
+                : "\nYour " + adopted + " adopted pets of this kind leave too.");
+        if (!MessageDialogBuilder.yesNo("Delete Custom Pet", text).yesText("Delete").noText("Cancel")
+                .icon(Messages.getWarningIcon()).ask(panel)) {
+            return;
+        }
+        try {
+            CustomPets.remove(kind);
+        } catch (IOException ex) {
+            Messages.showErrorDialog(panel, "Could not delete " + file + ": " + ex.getMessage(), "Delete Custom Pet");
+            return;
+        }
+        List<PetsSettings.PetEntry> keep = new ArrayList<>();
+        for (PetsSettings.PetEntry p : petsModel.getItems()) if (!kind.name().equals(p.kind)) keep.add(p);
+        if (keep.size() != petsModel.getSize()) {
+            petsList.clearSelection();
+            petsModel.replaceAll(keep);
+        }
+        if (!PetsSettings.getInstance().removePetsOfKind(kind.name())) PetsSettings.getInstance().fireChanged();
+        refreshCustom();
+    }
+
+    /** Shows the species currently loaded and the files that could not be loaded. */
+    private void refreshCustom() {
+        PetKind selected = customList.getSelectedValue();
+        customModel.replaceAll(PetKind.inGroup(PetKind.Group.CUSTOM));
+        if (selected != null) {
+            for (PetKind k : customModel.getItems()) if (k.name().equals(selected.name())) customList.setSelectedValue(k, true);
+        }
+        if (customList.getSelectedValue() == null && customModel.getSize() > 0) customList.setSelectedIndex(0);
+        customPreview.setVisible(customModel.getSize() > 0);
+        customProblems.removeAll();
+        List<CustomPets.Problem> problems = CustomPets.problems();
+        if (!problems.isEmpty()) {
+            customProblems.add(new ActionLink(problems.size() == 1 ? "1 file could not be loaded"
+                    : problems.size() + " files could not be loaded",
+                    (java.awt.event.ActionListener) e -> CustomPetImport.showProblems(panel, problems)));
+        }
+        customProblems.revalidate();
+        customProblems.repaint();
     }
 
     private static JSlider slider(int min, int max, int value, int ticks, String lo, String hi) {
@@ -202,6 +375,7 @@ public final class PetsConfigurable implements Configurable {
         s.visitorsMax = (int) visitorsMax.getValue();
         s.visitorsCartoon = visitorsCartoon.isSelected();
         s.visitorsPixel = visitorsPixel.isSelected();
+        s.visitorsCustom = visitorsCustom.isSelected();
         List<PetsSettings.PetEntry> pets = new ArrayList<>();
         for (PetsSettings.PetEntry p : petsModel.getItems()) pets.add(p.copy());
         s.pets = pets;
@@ -228,6 +402,7 @@ public final class PetsConfigurable implements Configurable {
                 || cur.visitorsMax != ui.visitorsMax
                 || cur.visitorsCartoon != ui.visitorsCartoon
                 || cur.visitorsPixel != ui.visitorsPixel
+                || cur.visitorsCustom != ui.visitorsCustom
                 || !ids(cur.pets).equals(ids(ui.pets));
     }
 
@@ -262,16 +437,23 @@ public final class PetsConfigurable implements Configurable {
         visitorsMax.setValue(Math.max(0, Math.min(20, Math.max(s.visitorsMin, s.visitorsMax))));
         visitorsCartoon.setSelected(s.visitorsCartoon);
         visitorsPixel.setSelected(s.visitorsPixel);
+        visitorsCustom.setSelected(s.visitorsCustom);
         syncVisitorUi.run();
         List<PetsSettings.PetEntry> pets = new ArrayList<>();
         for (PetsSettings.PetEntry p : s.pets) pets.add(p.copy());
         petsModel.replaceAll(pets);
         if (!pets.isEmpty()) preview.setPet(pets.get(0).petKind(), pets.get(0).palette());
+        refreshCustom();
     }
 
     @Override
     public void disposeUIResources() {
         petsModel = null;
         preview = null;
+        customModel = null;
+        customList = null;
+        customPreview = null;
+        customProblems = null;
+        panel = null;
     }
 }

@@ -4,6 +4,16 @@
 
 ## [Unreleased]
 
+### Added
+
+- Custom pets: import your own pixel-art pets from text files with **Tools | Code Gschpänli | Import Custom Pets...**
+  (also in Adopt a Pet and in the settings). They form their own *Custom* group, can be adopted, and visit like the
+  others (untick *Custom pets* under the visitor settings to keep them from visiting). The files are copied to
+  `~/.code-gschpaenli/custom-pets`, shared by all your JetBrains IDEs; a file with a mistake is skipped with its line
+  number. The settings list your custom pets with a preview and can delete them or open the folder.
+- A guide to making pets, by hand or with an AI assistant, with the file format, drawing tips and a template:
+  [docs/custom-pets.md](https://github.com/ProgrammiererEFZ/code-gschpaenli/blob/main/docs/custom-pets.md).
+
 ## [0.1.3] - 2026-11-16
 
 ### Added

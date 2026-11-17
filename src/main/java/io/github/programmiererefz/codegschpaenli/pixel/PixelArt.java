@@ -15,8 +15,9 @@ public final class PixelArt {
     private PixelArt() {
     }
 
-    /** The sprite sheet of a pixel-art species, or null for cartoon species. */
+    /** The sprite sheet of a pixel-art or custom species, or null for cartoon species. */
     public static PixelSheet sheet(PetKind kind) {
+        if (kind.customSheet() != null) return kind.customSheet();
         return switch (kind.name()) {
             case "PIXEL_CAT" -> PixelCat.SHEET;
             case "PIXEL_DOG" -> PixelDog.SHEET;
