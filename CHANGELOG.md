@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-11-17
+
 ### Added
 
 - Custom pets: import your own pixel-art pets from text files with **Tools | Code Gschpänli | Import Custom Pets...**
@@ -72,6 +74,7 @@
 - Throwing a ball while the previous one was still around could show both balls at once when the animation was
   paused, e.g. because the Find Action popup had focus.
 
-[Unreleased]: https://github.com/ProgrammiererEFZ/code-gschpaenli/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/ProgrammiererEFZ/code-gschpaenli/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/ProgrammiererEFZ/code-gschpaenli/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/ProgrammiererEFZ/code-gschpaenli/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/ProgrammiererEFZ/code-gschpaenli/commits/v0.1.2
