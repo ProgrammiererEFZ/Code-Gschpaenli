@@ -13,6 +13,14 @@
   number. The settings list your custom pets with a preview and can delete them or open the folder.
 - A guide to making pets, by hand or with an AI assistant, with the file format, drawing tips and a template:
   [docs/custom-pets.md](https://github.com/ProgrammiererEFZ/code-gschpaenli/blob/main/docs/custom-pets.md).
+- 11 more pixel-art species: koala (a pixel-art one next to the cartoon koala), armadillo (rolls into a ball), beaver,
+  polar bear cub (belly-slides), octopus (puffs ink when it falls), caterpillar (sleeps in a cocoon), alpaca, wolf pup
+  (howls), ring-tailed lemur, mole (tunnels through dirt mounds) and baby dragon (puffs smoke rings), each in several
+  colours.
+
+### Changed
+
+- The pixel-art gallery image shows all 50 pixel-art species.
 
 ## [0.1.3] - 2026-11-16
 

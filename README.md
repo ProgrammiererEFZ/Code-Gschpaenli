@@ -20,7 +20,7 @@ Works in IntelliJ-based IDEs 2025.2 and newer (IntelliJ IDEA, PhpStorm, PyCharm,
 ## Features
 
 - **Two art styles**
-  - *Pixel art* (the default): hand-made sprites of a cat, dog, duck, frog, hedgehog, penguin, mouse, turtle, owl, squirrel, ladybug, seal, chicken, axolotl, parrot, cockatoo, bee, crab, snail, bat, ocelot, otter, fox, bunny, red panda, sloth, flamingo, goat, cow, pony, fawn, hippo, elephant, kangaroo, platypus, chameleon, puffin, toucan and meerkat
+  - *Pixel art* (the default): hand-made sprites of a cat, dog, duck, frog, hedgehog, penguin, mouse, turtle, owl, squirrel, ladybug, seal, chicken, axolotl, parrot, cockatoo, bee, crab, snail, bat, ocelot, otter, fox, bunny, red panda, sloth, flamingo, goat, cow, pony, fawn, hippo, elephant, kangaroo, platypus, chameleon, puffin, toucan, meerkat, koala, armadillo, beaver, polar bear, octopus, caterpillar, alpaca, wolf, lemur, mole and dragon
   - *Cartoon*: smooth, procedurally drawn cat, dog, fox, bunny, panda, raccoon, hamster, pig, koala, sheep and lion
   - Every species comes in several colours.
 - **Custom pets:** draw your own pixel-art pets in a simple text format (or let an AI assistant draw them) and import
@@ -57,7 +57,7 @@ Works in IntelliJ-based IDEs 2025.2 and newer (IntelliJ IDEA, PhpStorm, PyCharm,
 
 | Pixel-art pets | Cartoon pets |
 | --- | --- |
-| ![All 39 pixel-art pets](docs/pixel-pets.png) | ![All 11 cartoon pets](docs/cartoon-pets.png) |
+| ![All 50 pixel-art pets](docs/pixel-pets.png) | ![All 11 cartoon pets](docs/cartoon-pets.png) |
 
 To hide all pets, untick **Tools | Code Gschpänli | Show Pets**. Pets also pause while *File | Power Save Mode* is on. The plugin collects no data and makes no network requests.
 

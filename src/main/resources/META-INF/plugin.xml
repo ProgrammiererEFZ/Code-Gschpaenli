@@ -10,7 +10,8 @@
       <li>Two styles: hand-made pixel-art pets (cat, dog, duck, frog, hedgehog, penguin, mouse, turtle, owl, squirrel,
           ladybug, seal, chicken, axolotl, parrot, cockatoo, bee, crab, snail, bat, ocelot, otter,
           fox, bunny, red panda, sloth, flamingo, goat, cow, pony, fawn, hippo, elephant, kangaroo, platypus, chameleon,
-          puffin, toucan, meerkat) and smooth cartoon pets
+          puffin, toucan, meerkat,
+          koala, armadillo, beaver, polar bear, octopus, caterpillar, alpaca, wolf, lemur, mole, dragon) and smooth cartoon pets
           (cat, dog, fox, bunny, panda, raccoon, hamster, pig, koala, sheep, lion), each in several colours</li>
       <li>Custom pets: import your own pixel-art pets from simple text files; they get their own group
           (<a href="https://github.com/ProgrammiererEFZ/code-gschpaenli/blob/main/docs/custom-pets.md">how to make one</a>)</li>
