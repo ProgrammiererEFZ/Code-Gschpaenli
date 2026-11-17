@@ -67,6 +67,7 @@ public final class PetNames {
     private static final List<String> POLAR_BEAR = List.of("Snowball", "Nanuq", "Blizzard", "Floe", "Tundra", "Frosty", "Aurora");
     private static final List<String> OCTOPUS = List.of("Inky", "Octavia", "Squiggles", "Tako", "Bloop", "Eightball", "Marina");
     private static final List<String> CATERPILLAR = List.of("Inchy", "Munch", "Wiggles", "Nibbler", "Squiggle", "Chrysalis", "Hotfix");
+    private static final List<String> ALPACA = List.of("Fluffy", "Cusco", "Paquita", "Quinoa", "Woolly", "Topknot", "Pacarina");
 
     private PetNames() {
     }
@@ -124,6 +125,7 @@ public final class PetNames {
             case "POLAR_BEAR" -> POLAR_BEAR;
             case "OCTOPUS" -> OCTOPUS;
             case "CATERPILLAR" -> CATERPILLAR;
+            case "ALPACA" -> ALPACA;
             default -> COMMON;
         };
         ThreadLocalRandom r = ThreadLocalRandom.current();
@@ -185,6 +187,7 @@ public final class PetNames {
             case "POLAR_BEAR" -> "*belly-slides in* Ice to meet you! Shall we break the ice on that backlog?";
             case "OCTOPUS" -> "*waves all eight arms* Eight hands on deck! I can review, refactor and resolve conflicts at once.";
             case "CATERPILLAR" -> "*inches over* Still a work in progress. One day this code and I will both have wings.";
+            case "ALPACA" -> "*hums softly* Mmmh. Push to main on a Friday and I will spit. Ptoo.";
             default -> "Hello!";
         };
     }
