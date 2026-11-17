@@ -5,6 +5,7 @@
 package io.github.programmiererefz.codegschpaenli.overlay;
 
 import com.intellij.openapi.diagnostic.Logger;
+import io.github.programmiererefz.codegschpaenli.custom.CustomPets;
 import io.github.programmiererefz.codegschpaenli.pet.PetKind;
 import io.github.programmiererefz.codegschpaenli.settings.PetNames;
 import io.github.programmiererefz.codegschpaenli.settings.PetsSettings;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Development aid, inactive unless the JVM is started with {@code -Dcodegschpaenli.debug.snapshotDir=<dir>}
@@ -48,6 +50,7 @@ final class DebugSnapshots {
     static void seedPets() {
         if (!ENABLED) return;
         PetsSettings s = PetsSettings.getInstance();
+        CustomPets.ensureLoaded(); // so that custom ids in codegschpaenli.debug.kinds resolve
         String kindList = System.getProperty("codegschpaenli.debug.kinds", "").trim();
         if (!kindList.isEmpty()) {
             s.getState().pets.clear();
@@ -60,10 +63,10 @@ final class DebugSnapshots {
             return;
         }
         int wanted = Integer.getInteger("codegschpaenli.debug.pets", 0);
-        PetKind[] kinds = PetKind.values();
+        List<PetKind> kinds = PetKind.values();
         for (int i = s.getState().pets.size(); i < wanted; i++) {
-            PetKind k = kinds[i % kinds.length];
-            s.getState().pets.add(new PetsSettings.PetEntry(k, k.palettes().get(i / kinds.length % k.palettes().size()).name(),
+            PetKind k = kinds.get(i % kinds.size());
+            s.getState().pets.add(new PetsSettings.PetEntry(k, k.palettes().get(i / kinds.size() % k.palettes().size()).name(),
                     PetNames.random(k)));
         }
         s.getState().showNames = true;

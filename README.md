@@ -23,6 +23,9 @@ Works in IntelliJ-based IDEs 2025.2 and newer (IntelliJ IDEA, PhpStorm, PyCharm,
   - *Pixel art* (the default): hand-made sprites of a cat, dog, duck, frog, hedgehog, penguin, mouse, turtle, owl, squirrel, ladybug, seal, chicken, axolotl, parrot, cockatoo, bee, crab, snail, bat, ocelot, otter, fox, bunny, red panda, sloth, flamingo, goat, cow, pony, fawn, hippo, elephant, kangaroo, platypus, chameleon, puffin, toucan and meerkat
   - *Cartoon*: smooth, procedurally drawn cat, dog, fox, bunny, panda, raccoon, hamster, pig, koala, sheep and lion
   - Every species comes in several colours.
+- **Custom pets:** draw your own pixel-art pets in a simple text format (or let an AI assistant draw them) and import
+  them with **Tools | Code Gschpänli | Import Custom Pets...**. They get their own *Custom* group, and can be adopted
+  and visit like the others. See [docs/custom-pets.md](docs/custom-pets.md) for the format and how to make a pet.
 - **Pets live on the IDE's own UI.** Each window's Swing hierarchy is scanned for edges (window header, status bar,
   tool window tops, editor tab bars, toolbars, dividers). The horizontal edges become floors and the vertical borders
   become climbable walls. Pets fall when the layout changes under them.
@@ -48,7 +51,8 @@ Works in IntelliJ-based IDEs 2025.2 and newer (IntelliJ IDEA, PhpStorm, PyCharm,
   - which IDE parts pets may walk on
   - visitors (range, which art styles)
   - your adopted pets
-- **Tools | Code Gschpänli** menu: Adopt a Pet, Throw Ball, Roll Call (also calls back pets that left for now),
+  - your custom pets: import, preview, delete, open the folder
+- **Tools | Code Gschpänli** menu: Adopt a Pet, Import Custom Pets, Throw Ball, Roll Call (also calls back pets that left for now),
   Show Pets, Show Name Tags, Random Visitors, Remove Pet, Remove All Pets
 
 | Pixel-art pets | Cartoon pets |
@@ -87,6 +91,7 @@ Development helpers:
 - `./gradlew runPhpStorm` / `runPyCharm` run a sandbox of a local PhpStorm / PyCharm (2025.2 or newer). They exist only
   when the IDE is installed at the default path; set another one with `-PphpStormPath=<dir>` / `-PpyCharmPath=<dir>`.
 - `-PopenProject=<dir>` opens a project in the sandbox.
+- `-PcustomPetsDir=<dir>` makes the sandbox read and import custom pets there instead of `~/.code-gschpaenli/custom-pets`.
 - `-PpetsDebugDir=<dir>` makes the sandbox write a PNG snapshot of every window, plus the detected surfaces, walls and
   pet states, every few seconds.
 - `-PpetsPerfLog=<file>` runs a benchmark of about 11 minutes: pets off, 1 pet and 6 pets, each at 30 and 60 fps. It

@@ -4,129 +4,154 @@
 
 package io.github.programmiererefz.codegschpaenli.pet;
 
+import io.github.programmiererefz.codegschpaenli.pixel.PixelSheet;
+
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The species of pet. Each species defines a body "rig" (proportions, ear and tail style)
- * and a set of colour variants. All art is drawn procedurally by {@link io.github.programmiererefz.codegschpaenli.render.PetRenderer}.
+ * A species of pet and its colour variants.
+ *
+ * <ul>
+ *   <li>Cartoon species define a body "rig" (proportions, ear and tail style) that
+ *       {@link io.github.programmiererefz.codegschpaenli.render.PetRenderer} draws procedurally.</li>
+ *   <li>Pixel-art species are hand-made sprite sheets in {@link io.github.programmiererefz.codegschpaenli.pixel}.</li>
+ *   <li>Custom species are pixel-art sprite sheets the user imported from text files (see
+ *       {@link io.github.programmiererefz.codegschpaenli.custom.CustomPets}); they exist only at runtime, so this is a
+ *       class with constants for the built-in species rather than an enum.</li>
+ * </ul>
+ *
+ * Species are compared by identity. {@link #name()} is the stable id that is stored in the settings.
  */
-public enum PetKind {
-    CAT("Cat", new Spec(19, 10, 10.5, 6.2, 9.5, -6.5, 3.0, Ears.POINTY, Tail.THIN, 0, true, Gait.TROT),
+public final class PetKind {
+    public static final PetKind CAT = new PetKind("CAT", "Cat", new Spec(19, 10, 10.5, 6.2, 9.5, -6.5, 3.0, Ears.POINTY, Tail.THIN, 0, true, Gait.TROT),
             List.of(
                     new Palette("Ginger", c(0xE8994A), c(0xFFE6C7), c(0xE8994A), c(0xF2A7A0), c(0x7A3E12), c(0x2B1D14), c(0xE77C7C), c(0xC4702C), c(0xFFE6C7)),
                     new Palette("Black", c(0x34343C), c(0x4A4A55), c(0x34343C), c(0xC98B92), c(0x111116), c(0xE6C334), c(0xC98B92), c(0x2A2A30), c(0x34343C)),
                     new Palette("White", c(0xF5F2EC), c(0xFFFFFF), c(0xF5F2EC), c(0xF4AFB4), c(0x8C8A86), c(0x3E6FB0), c(0xEE8F98), c(0xE2DDD3), c(0xF5F2EC)),
                     new Palette("Grey", c(0x9AA1AB), c(0xD6DAE0), c(0x9AA1AB), c(0xE9A9B0), c(0x474C55), c(0x3B7A3B), c(0xD98A93), c(0x7F8792), c(0xD6DAE0)),
                     new Palette("Tuxedo", c(0x2E2E35), c(0xFFFFFF), c(0x2E2E35), c(0xE9A9B0), c(0x101014), c(0x7CC24A), c(0xE98C96), c(0x2E2E35), c(0xFFFFFF))
-            )),
-    DOG("Dog", new Spec(20, 11, 11.5, 6.4, 10, -6.5, 3.4, Ears.FLOPPY, Tail.WAG, 1, false, Gait.TROT),
+            ));
+    public static final PetKind DOG = new PetKind("DOG", "Dog", new Spec(20, 11, 11.5, 6.4, 10, -6.5, 3.4, Ears.FLOPPY, Tail.WAG, 1, false, Gait.TROT),
             List.of(
                     new Palette("Brown", c(0xB27B4B), c(0xEED6B6), c(0xB27B4B), c(0x7A4E2A), c(0x4F2F17), c(0x2A1B10), c(0x2A1B10), c(0x8E5C33), c(0xEED6B6)),
                     new Palette("Golden", c(0xE5B563), c(0xFFF0CF), c(0xE5B563), c(0xC48D3E), c(0x7B5420), c(0x2A1B10), c(0x2A1B10), c(0xCF9C4A), c(0xFFF0CF)),
                     new Palette("Black", c(0x3A322E), c(0xA8805C), c(0x3A322E), c(0x2A2420), c(0x161210), c(0x2A1B10), c(0x111111), c(0x2A2420), c(0xA8805C)),
                     new Palette("Husky", c(0x8D96A3), c(0xFFFFFF), c(0xFFFFFF), c(0x6E7783), c(0x3C424B), c(0x5BA6E0), c(0x222222), c(0x6E7783), c(0xFFFFFF))
-            )),
-    FOX("Fox", new Spec(20, 9.5, 10.5, 5.8, 10, -6, 2.8, Ears.TALL, Tail.BUSHY, 2, false, Gait.TROT),
+            ));
+    public static final PetKind FOX = new PetKind("FOX", "Fox", new Spec(20, 9.5, 10.5, 5.8, 10, -6, 2.8, Ears.TALL, Tail.BUSHY, 2, false, Gait.TROT),
             List.of(
                     new Palette("Red", c(0xE36B2C), c(0xFFF6EC), c(0x4A2A1E), c(0x4A2A1E), c(0x6E2E0E), c(0x2A1B10), c(0x2A1B10), c(0xC2551C), c(0xFFF6EC)),
                     new Palette("Arctic", c(0xEEF1F5), c(0xFFFFFF), c(0xC9CFD8), c(0xA8B0BC), c(0x7D8591), c(0x2A2F38), c(0x2A2F38), c(0xD7DCE3), c(0xFFFFFF)),
                     new Palette("Silver", c(0x5D6068), c(0xD9DCE1), c(0x2C2D31), c(0x2C2D31), c(0x1C1D20), c(0xE8B33A), c(0x15161A), c(0x46484E), c(0xF5F5F5))
-            )),
-    BUNNY("Bunny", new Spec(15, 11, 8, 5.8, 7, -6, 3.2, Ears.LONG, Tail.PUFF, 0, false, Gait.HOP),
+            ));
+    public static final PetKind BUNNY = new PetKind("BUNNY", "Bunny", new Spec(15, 11, 8, 5.8, 7, -6, 3.2, Ears.LONG, Tail.PUFF, 0, false, Gait.HOP),
             List.of(
                     new Palette("White", c(0xF7F5F2), c(0xFFFFFF), c(0xF7F5F2), c(0xF6B3BC), c(0x8E8A86), c(0xC2405A), c(0xEE8F9A), c(0xE6E1DA), c(0xFFFFFF)),
                     new Palette("Brown", c(0xA98266), c(0xEADBCB), c(0xA98266), c(0xE8A9A9), c(0x52392A), c(0x241812), c(0xD98C8C), c(0x8E6A50), c(0xFFFFFF)),
                     new Palette("Grey", c(0xA4A6AC), c(0xE4E5E8), c(0xA4A6AC), c(0xE7AEB6), c(0x4D4F55), c(0x241812), c(0xD98C96), c(0x8A8C92), c(0xFFFFFF))
-            )),
-    PANDA("Panda", new Spec(20, 12, 11, 6.8, 9.5, -6, 4.0, Ears.ROUND, Tail.PUFF, 0, false, Gait.TROT),
+            ));
+    public static final PetKind PANDA = new PetKind("PANDA", "Panda", new Spec(20, 12, 11, 6.8, 9.5, -6, 4.0, Ears.ROUND, Tail.PUFF, 0, false, Gait.TROT),
             List.of(
                     new Palette("Classic", c(0xF7F7F4), c(0xFFFFFF), c(0x26262B), c(0x26262B), c(0x5A5A60), c(0x101012), c(0x26262B), c(0x26262B), c(0xF7F7F4)),
                     new Palette("Red", c(0xC9572A), c(0xF3E3D3), c(0x3A2219), c(0x3A2219), c(0x5A2A14), c(0x120A06), c(0x1A0E08), c(0x8E3A18), c(0xF3E3D3))
-            )),
-    RACCOON("Raccoon", new Spec(20, 10.5, 10, 6.2, 9.5, -6, 3.2, Ears.POINTY, Tail.RINGED, 2, true, Gait.TROT),
+            ));
+    public static final PetKind RACCOON = new PetKind("RACCOON", "Raccoon", new Spec(20, 10.5, 10, 6.2, 9.5, -6, 3.2, Ears.POINTY, Tail.RINGED, 2, true, Gait.TROT),
             List.of(
                     new Palette("Grey", c(0x8E9096), c(0xF2F1EE), c(0x3B3B40), c(0xE7E4DF), c(0x2A2A2E), c(0x8A5A2E), c(0x1B1B1E), c(0x34343A), c(0x34343A)),
                     new Palette("Brown", c(0x9C8572), c(0xF4EDE3), c(0x45362B), c(0xEDE3D6), c(0x2E241D), c(0x7A4E26), c(0x1E1712), c(0x3E3026), c(0x3E3026)),
                     new Palette("Blonde", c(0xD8C3A0), c(0xFFF8EC), c(0x8A7356), c(0xFFF4E2), c(0x5E4C36), c(0x6A4422), c(0x3A2C1C), c(0x7E6646), c(0x7E6646))
-            )),
-    HAMSTER("Hamster", new Spec(15, 11, 6.8, 6.3, 6.6, -4.2, 2.6, Ears.ROUND, Tail.STUB, 0, true, Gait.TROT),
+            ));
+    public static final PetKind HAMSTER = new PetKind("HAMSTER", "Hamster", new Spec(15, 11, 6.8, 6.3, 6.6, -4.2, 2.6, Ears.ROUND, Tail.STUB, 0, true, Gait.TROT),
             List.of(
                     new Palette("Golden", c(0xE3A45A), c(0xFFF4E2), c(0xF2C9A8), c(0xE9A9A0), c(0x7A4A1C), c(0x1E140C), c(0xE58A94), c(0xC98840), c(0xE3A45A)),
                     new Palette("Cream", c(0xF2DDB8), c(0xFFFBF2), c(0xF6CFC0), c(0xF0B0B0), c(0x8E7254), c(0x9E2236), c(0xE58A94), c(0xDCC39A), c(0xF2DDB8)),
                     new Palette("Winter white", c(0xB9BEC6), c(0xFFFFFF), c(0xF4D3CF), c(0xEBB1B6), c(0x4E535C), c(0x15161A), c(0xE58A94), c(0x6E737C), c(0xB9BEC6))
-            )),
-    PIG("Pig", new Spec(21, 12, 10, 6.4, 9.5, -5.5, 3.6, Ears.POINTY, Tail.CURLY, 3, false, Gait.TROT),
+            ));
+    public static final PetKind PIG = new PetKind("PIG", "Pig", new Spec(21, 12, 10, 6.4, 9.5, -5.5, 3.6, Ears.POINTY, Tail.CURLY, 3, false, Gait.TROT),
             List.of(
                     new Palette("Pink", c(0xF7B5BF), c(0xFFD9DE), c(0xF29FAC), c(0xE58494), c(0xA2465A), c(0x2A1A1E), c(0xA2465A), c(0xEF97A6), c(0xF7B5BF)),
                     new Palette("Tamworth", c(0xD9824A), c(0xEFAD7C), c(0xC46E38), c(0xA8562A), c(0x5E2C12), c(0x24160C), c(0x6E3418), c(0xE8A07A), c(0xD9824A)),
                     new Palette("Berkshire", c(0x3A3438), c(0x544C51), c(0xF2C9CF), c(0x2A2528), c(0x141113), c(0x8A5A2E), c(0x9E5262), c(0xF2BAC4), c(0x3A3438))
-            )),
-    KOALA("Koala", new Spec(18, 11.5, 9, 7.0, 9, -5.5, 3.6, Ears.FLUFFY, Tail.STUB, 4, false, Gait.TROT),
+            ));
+    public static final PetKind KOALA = new PetKind("KOALA", "Koala", new Spec(18, 11.5, 9, 7.0, 9, -5.5, 3.6, Ears.FLUFFY, Tail.STUB, 4, false, Gait.TROT),
             List.of(
                     new Palette("Grey", c(0x9EA3AA), c(0xF1EEE9), c(0x8C9198), c(0xF4F1EC), c(0x3E4249), c(0x1C1D20), c(0x2C2B30), c(0x7F848C), c(0x9EA3AA)),
                     new Palette("Silver", c(0xC9CDD3), c(0xFFFFFF), c(0xB5B9C0), c(0xFFFFFF), c(0x5A5E66), c(0x1C1D20), c(0x34343A), c(0xA9AEB6), c(0xC9CDD3)),
                     new Palette("Brown", c(0xA28F7C), c(0xF2E8DC), c(0x8E7C6A), c(0xF6EEE4), c(0x43372C), c(0x1E1712), c(0x2A221C), c(0x85735F), c(0xA28F7C)),
                     new Palette("Charcoal", c(0x62666E), c(0xDEDBD5), c(0x54585F), c(0xE9E6E1), c(0x24262A), c(0x101012), c(0x18181B), c(0x4E5259), c(0x62666E))
-            )),
-    SHEEP("Sheep", new Spec(19, 12, 10, 5.2, 10, -5.0, 2.6, Ears.SIDE, Tail.PUFF, 1, false, Gait.TROT, Coat.WOOL),
+            ));
+    public static final PetKind SHEEP = new PetKind("SHEEP", "Sheep", new Spec(19, 12, 10, 5.2, 10, -5.0, 2.6, Ears.SIDE, Tail.PUFF, 1, false, Gait.TROT, Coat.WOOL),
             List.of(
                     new Palette("White", c(0xF6F3EA), c(0xFBE9E0), c(0xE9CDB8), c(0xE7AFA6), c(0x857C70), c(0x2A1E16), c(0xC77E7E), c(0xE4DFD2), c(0xF6F3EA)),
                     new Palette("Suffolk", c(0xF4F1E8), c(0x4A4446), c(0x2F2B2D), c(0x2F2B2D), c(0x6E675E), c(0xD9A441), c(0x161314), c(0xE2DDD0), c(0xF4F1E8)),
                     new Palette("Brown", c(0xA27A58), c(0xE2C6A8), c(0xCDA582), c(0xB98868), c(0x4A3220), c(0x2A1B10), c(0x6E4630), c(0x8C6646), c(0xA27A58)),
                     new Palette("Black", c(0x5A5660), c(0x7A747A), c(0x3A363C), c(0x3A363C), c(0x18171A), c(0xD9A441), c(0x0E0D0F), c(0x6E6A74), c(0x5A5660))
-            )),
-    LION("Lion", new Spec(21, 11, 11, 6.0, 10, -6.5, 3.4, Ears.ROUND, Tail.TUFT, 1, true, Gait.TROT, Coat.MANE),
+            ));
+    public static final PetKind LION = new PetKind("LION", "Lion", new Spec(21, 11, 11, 6.0, 10, -6.5, 3.4, Ears.ROUND, Tail.TUFT, 1, true, Gait.TROT, Coat.MANE),
             List.of(
                     new Palette("Golden", c(0xE3AC55), c(0xF8E2B4), c(0xD89E48), c(0xC4843A), c(0x5E3A12), c(0x2A1B10), c(0x7A3E26), c(0xB0601F), c(0xB0601F)),
                     new Palette("Tawny", c(0xC99156), c(0xEFD3AE), c(0xBC834A), c(0x9E6A38), c(0x3E2412), c(0x2A1B10), c(0x5A2E1C), c(0x4E2C1A), c(0x4E2C1A)),
                     new Palette("White", c(0xF3EADB), c(0xFFFBF2), c(0xEADFCB), c(0xE2C9A8), c(0x8A7A62), c(0x3E78B8), c(0xC98A86), c(0xE4CFA6), c(0xE4CFA6))
-            )),
+            ));
 
     // Pixel-art group: hand-made sprite sheets in io.github.programmiererefz.codegschpaenli.pixel
-    PIXEL_CAT("Cat", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.catPalettes()),
-    PIXEL_DOG("Dog", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.dogPalettes()),
-    PIXEL_DUCK("Duck", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.duckPalettes()),
-    PIXEL_FROG("Frog", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.frogPalettes()),
-    PIXEL_HEDGEHOG("Hedgehog", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.hedgehogPalettes()),
-    PIXEL_PENGUIN("Penguin", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.penguinPalettes()),
-    PIXEL_MOUSE("Mouse", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.mousePalettes()),
-    PIXEL_TURTLE("Turtle", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.turtlePalettes()),
-    PIXEL_OWL("Owl", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.owlPalettes()),
-    PIXEL_SQUIRREL("Squirrel", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.squirrelPalettes()),
-    PIXEL_LADYBUG("Ladybug", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.ladybugPalettes()),
-    PIXEL_SEAL("Seal", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.sealPalettes()),
-    PIXEL_CHICKEN("Chicken", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.chickenPalettes()),
-    PIXEL_AXOLOTL("Axolotl", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.axolotlPalettes()),
-    PIXEL_PARROT("Parrot", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.parrotPalettes()),
-    PIXEL_COCKATOO("Cockatoo", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.cockatooPalettes()),
-    PIXEL_BEE("Bee", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.beePalettes()),
-    PIXEL_CRAB("Crab", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.crabPalettes()),
-    PIXEL_SNAIL("Snail", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.snailPalettes()),
-    PIXEL_BAT("Bat", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.batPalettes()),
-    PIXEL_OCELOT("Ocelot", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.ocelotPalettes()),
-    PIXEL_OTTER("Otter", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.otterPalettes()),
-    PIXEL_FOX("Fox", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.foxPalettes()),
-    PIXEL_BUNNY("Bunny", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.bunnyPalettes()),
-    PIXEL_RED_PANDA("Red panda", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.redPandaPalettes()),
-    PIXEL_SLOTH("Sloth", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.slothPalettes()),
-    PIXEL_FLAMINGO("Flamingo", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.flamingoPalettes()),
-    PIXEL_GOAT("Goat", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.goatPalettes()),
-    PIXEL_COW("Cow", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.cowPalettes()),
-    PIXEL_PONY("Pony", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.ponyPalettes()),
-    PIXEL_FAWN("Fawn", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.fawnPalettes()),
-    PIXEL_HIPPO("Hippo", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.hippoPalettes()),
-    PIXEL_ELEPHANT("Elephant", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.elephantPalettes()),
-    PIXEL_KANGAROO("Kangaroo", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.kangarooPalettes()),
-    PIXEL_PLATYPUS("Platypus", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.platypusPalettes()),
-    PIXEL_CHAMELEON("Chameleon", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.chameleonPalettes()),
-    PIXEL_PUFFIN("Puffin", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.puffinPalettes()),
-    PIXEL_TOUCAN("Toucan", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.toucanPalettes()),
-    PIXEL_MEERKAT("Meerkat", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.meerkatPalettes());
+    public static final PetKind PIXEL_CAT = new PetKind("PIXEL_CAT", "Cat", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.catPalettes());
+    public static final PetKind PIXEL_DOG = new PetKind("PIXEL_DOG", "Dog", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.dogPalettes());
+    public static final PetKind PIXEL_DUCK = new PetKind("PIXEL_DUCK", "Duck", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.duckPalettes());
+    public static final PetKind PIXEL_FROG = new PetKind("PIXEL_FROG", "Frog", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.frogPalettes());
+    public static final PetKind PIXEL_HEDGEHOG = new PetKind("PIXEL_HEDGEHOG", "Hedgehog", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.hedgehogPalettes());
+    public static final PetKind PIXEL_PENGUIN = new PetKind("PIXEL_PENGUIN", "Penguin", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.penguinPalettes());
+    public static final PetKind PIXEL_MOUSE = new PetKind("PIXEL_MOUSE", "Mouse", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.mousePalettes());
+    public static final PetKind PIXEL_TURTLE = new PetKind("PIXEL_TURTLE", "Turtle", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.turtlePalettes());
+    public static final PetKind PIXEL_OWL = new PetKind("PIXEL_OWL", "Owl", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.owlPalettes());
+    public static final PetKind PIXEL_SQUIRREL = new PetKind("PIXEL_SQUIRREL", "Squirrel", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.squirrelPalettes());
+    public static final PetKind PIXEL_LADYBUG = new PetKind("PIXEL_LADYBUG", "Ladybug", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.ladybugPalettes());
+    public static final PetKind PIXEL_SEAL = new PetKind("PIXEL_SEAL", "Seal", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.sealPalettes());
+    public static final PetKind PIXEL_CHICKEN = new PetKind("PIXEL_CHICKEN", "Chicken", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.chickenPalettes());
+    public static final PetKind PIXEL_AXOLOTL = new PetKind("PIXEL_AXOLOTL", "Axolotl", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.axolotlPalettes());
+    public static final PetKind PIXEL_PARROT = new PetKind("PIXEL_PARROT", "Parrot", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.parrotPalettes());
+    public static final PetKind PIXEL_COCKATOO = new PetKind("PIXEL_COCKATOO", "Cockatoo", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.cockatooPalettes());
+    public static final PetKind PIXEL_BEE = new PetKind("PIXEL_BEE", "Bee", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.beePalettes());
+    public static final PetKind PIXEL_CRAB = new PetKind("PIXEL_CRAB", "Crab", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.crabPalettes());
+    public static final PetKind PIXEL_SNAIL = new PetKind("PIXEL_SNAIL", "Snail", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.snailPalettes());
+    public static final PetKind PIXEL_BAT = new PetKind("PIXEL_BAT", "Bat", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.batPalettes());
+    public static final PetKind PIXEL_OCELOT = new PetKind("PIXEL_OCELOT", "Ocelot", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.ocelotPalettes());
+    public static final PetKind PIXEL_OTTER = new PetKind("PIXEL_OTTER", "Otter", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.otterPalettes());
+    public static final PetKind PIXEL_FOX = new PetKind("PIXEL_FOX", "Fox", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.foxPalettes());
+    public static final PetKind PIXEL_BUNNY = new PetKind("PIXEL_BUNNY", "Bunny", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.bunnyPalettes());
+    public static final PetKind PIXEL_RED_PANDA = new PetKind("PIXEL_RED_PANDA", "Red panda", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.redPandaPalettes());
+    public static final PetKind PIXEL_SLOTH = new PetKind("PIXEL_SLOTH", "Sloth", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.slothPalettes());
+    public static final PetKind PIXEL_FLAMINGO = new PetKind("PIXEL_FLAMINGO", "Flamingo", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.flamingoPalettes());
+    public static final PetKind PIXEL_GOAT = new PetKind("PIXEL_GOAT", "Goat", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.goatPalettes());
+    public static final PetKind PIXEL_COW = new PetKind("PIXEL_COW", "Cow", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.cowPalettes());
+    public static final PetKind PIXEL_PONY = new PetKind("PIXEL_PONY", "Pony", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.ponyPalettes());
+    public static final PetKind PIXEL_FAWN = new PetKind("PIXEL_FAWN", "Fawn", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.fawnPalettes());
+    public static final PetKind PIXEL_HIPPO = new PetKind("PIXEL_HIPPO", "Hippo", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.hippoPalettes());
+    public static final PetKind PIXEL_ELEPHANT = new PetKind("PIXEL_ELEPHANT", "Elephant", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.elephantPalettes());
+    public static final PetKind PIXEL_KANGAROO = new PetKind("PIXEL_KANGAROO", "Kangaroo", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.kangarooPalettes());
+    public static final PetKind PIXEL_PLATYPUS = new PetKind("PIXEL_PLATYPUS", "Platypus", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.platypusPalettes());
+    public static final PetKind PIXEL_CHAMELEON = new PetKind("PIXEL_CHAMELEON", "Chameleon", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.chameleonPalettes());
+    public static final PetKind PIXEL_PUFFIN = new PetKind("PIXEL_PUFFIN", "Puffin", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.puffinPalettes());
+    public static final PetKind PIXEL_TOUCAN = new PetKind("PIXEL_TOUCAN", "Toucan", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.toucanPalettes());
+    public static final PetKind PIXEL_MEERKAT = new PetKind("PIXEL_MEERKAT", "Meerkat", Group.PIXEL, null, io.github.programmiererefz.codegschpaenli.pixel.PixelArt.meerkatPalettes());
 
-    /** The two art styles: hand-made pixel-art pets (the default, listed first) and smooth vector "cartoon" pets. */
+    /** The built-in species in menu order: cartoon pets, then pixel-art pets. */
+    private static final List<PetKind> BUILT_IN = List.of(
+            CAT, DOG, FOX, BUNNY, PANDA, RACCOON, HAMSTER, PIG, KOALA, SHEEP, LION, PIXEL_CAT, PIXEL_DOG, PIXEL_DUCK,
+            PIXEL_FROG, PIXEL_HEDGEHOG, PIXEL_PENGUIN, PIXEL_MOUSE, PIXEL_TURTLE, PIXEL_OWL, PIXEL_SQUIRREL,
+            PIXEL_LADYBUG, PIXEL_SEAL, PIXEL_CHICKEN, PIXEL_AXOLOTL, PIXEL_PARROT, PIXEL_COCKATOO, PIXEL_BEE,
+            PIXEL_CRAB, PIXEL_SNAIL, PIXEL_BAT, PIXEL_OCELOT, PIXEL_OTTER, PIXEL_FOX, PIXEL_BUNNY, PIXEL_RED_PANDA,
+            PIXEL_SLOTH, PIXEL_FLAMINGO, PIXEL_GOAT, PIXEL_COW, PIXEL_PONY, PIXEL_FAWN, PIXEL_HIPPO, PIXEL_ELEPHANT,
+            PIXEL_KANGAROO, PIXEL_PLATYPUS, PIXEL_CHAMELEON, PIXEL_PUFFIN, PIXEL_TOUCAN, PIXEL_MEERKAT);
+
+    /**
+     * The art styles, in the order the adopt dialog offers them: hand-made pixel-art pets (the default), smooth vector
+     * "cartoon" pets, and the pixel-art pets the user imported.
+     */
     public enum Group {
-        PIXEL("Pixel art"), CARTOON("Cartoon");
+        PIXEL("Pixel art"), CARTOON("Cartoon"), CUSTOM("Custom");
 
         public final String label;
 
@@ -181,33 +206,86 @@ public enum PetKind {
                           Color nose, Color accent, Color tailTip) {
     }
 
+    /** Prefix of the ids of custom species, e.g. {@code custom:pebble}. */
+    public static final String CUSTOM_PREFIX = "custom:";
+
+    /** The imported species, in the order they are offered; replaced as a whole by {@link #setCustomKinds}. */
+    private static volatile List<PetKind> customKinds = List.of();
+
+    private final String id;
     private final String displayName;
     private final Group group;
     private final Spec spec;
     private final List<Palette> palettes;
+    /** The sprite sheet of a custom species; built-in pixel-art sheets are looked up in {@code PixelArt}. */
+    private final PixelSheet customSheet;
 
-    PetKind(String displayName, Spec spec, List<Palette> palettes) {
-        this(displayName, Group.CARTOON, spec, palettes);
+    private PetKind(String id, String displayName, Spec spec, List<Palette> palettes) {
+        this(id, displayName, Group.CARTOON, spec, palettes);
     }
 
-    PetKind(String displayName, Group group, Spec spec, List<Palette> palettes) {
+    private PetKind(String id, String displayName, Group group, Spec spec, List<Palette> palettes) {
+        this(id, displayName, group, spec, palettes, null);
+    }
+
+    private PetKind(String id, String displayName, Group group, Spec spec, List<Palette> palettes, PixelSheet customSheet) {
+        this.id = id;
         this.displayName = displayName;
         this.group = group;
         this.spec = spec;
         this.palettes = palettes;
+        this.customSheet = customSheet;
+    }
+
+    /** A custom pixel-art species. Register it with {@link #setCustomKinds} to make it adoptable. */
+    public static PetKind custom(String id, String displayName, PixelSheet sheet, List<Palette> palettes) {
+        if (!id.startsWith(CUSTOM_PREFIX)) throw new IllegalArgumentException("custom ids start with " + CUSTOM_PREFIX + ": " + id);
+        if (palettes.isEmpty()) throw new IllegalArgumentException("a pet needs at least one colour: " + id);
+        return new PetKind(id, displayName, Group.CUSTOM, null, List.copyOf(palettes), sheet);
+    }
+
+    /** Replaces the imported species. Pets that already exist keep the species object they were created with. */
+    public static void setCustomKinds(List<PetKind> kinds) {
+        for (PetKind k : kinds) {
+            if (k.group != Group.CUSTOM) throw new IllegalArgumentException("not a custom species: " + k.id);
+        }
+        customKinds = List.copyOf(kinds);
+    }
+
+    /** The stable id stored in the settings: the constant name of a built-in species, {@code custom:...} otherwise. */
+    public String name() {
+        return id;
     }
 
     public Group group() {
         return group;
     }
 
+    /** True for species drawn from a pixel-art sprite sheet: the built-in pixel-art pets and all custom pets. */
     public boolean isPixel() {
-        return group == Group.PIXEL;
+        return group != Group.CARTOON;
+    }
+
+    public boolean isCustom() {
+        return group == Group.CUSTOM;
+    }
+
+    /** The sprite sheet of a custom species, null for built-in species. */
+    public PixelSheet customSheet() {
+        return customSheet;
+    }
+
+    /** All species: the built-in ones, then the imported ones. */
+    public static List<PetKind> values() {
+        List<PetKind> all = new ArrayList<>(BUILT_IN);
+        all.addAll(customKinds);
+        return all;
     }
 
     public static List<PetKind> inGroup(Group g) {
-        List<PetKind> out = new java.util.ArrayList<>();
-        for (PetKind k : values()) if (k.group == g) out.add(k);
+        if (g == Group.CUSTOM) return customKinds;
+        List<PetKind> out = new ArrayList<>();
+        for (PetKind k : BUILT_IN) if (k.group == g) out.add(k);
         return out;
     }
 
@@ -235,11 +313,21 @@ public enum PetKind {
         return displayName;
     }
 
+    /**
+     * The species with this id (or, for built-in species, this display name). An unknown id gives the cartoon cat; a
+     * custom species that is not (or no longer) imported gives the pixel-art cat, so the pet stays around and turns
+     * back into its own species once the file is imported again.
+     */
     public static PetKind parse(String s) {
-        for (PetKind k : values()) {
-            if (k.name().equalsIgnoreCase(s)) return k;
+        if (s == null) return CAT;
+        for (PetKind k : BUILT_IN) {
+            if (k.id.equalsIgnoreCase(s)) return k;
         }
-        for (PetKind k : values()) {
+        for (PetKind k : customKinds) {
+            if (k.id.equalsIgnoreCase(s)) return k;
+        }
+        if (s.regionMatches(true, 0, CUSTOM_PREFIX, 0, CUSTOM_PREFIX.length())) return PIXEL_CAT;
+        for (PetKind k : BUILT_IN) {
             if (k.displayName.equalsIgnoreCase(s)) return k;
         }
         return CAT;

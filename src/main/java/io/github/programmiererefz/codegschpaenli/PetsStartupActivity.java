@@ -7,6 +7,7 @@ package io.github.programmiererefz.codegschpaenli;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.ProjectActivity;
+import io.github.programmiererefz.codegschpaenli.custom.CustomPets;
 import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public final class PetsStartupActivity implements ProjectActivity {
     @Override
     public @Nullable Object execute(@NotNull Project project, @NotNull Continuation<? super Unit> continuation) {
+        CustomPets.ensureLoaded(); // reads the custom pet files here, off the UI thread
         ApplicationManager.getApplication().invokeLater(() -> PetsManager.getInstance().ensureStarted());
         return Unit.INSTANCE;
     }

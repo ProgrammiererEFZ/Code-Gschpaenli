@@ -106,6 +106,7 @@ final class Visitors {
         List<PetKind> kinds = new ArrayList<>();
         if (s.visitorsCartoon) kinds.addAll(PetKind.inGroup(PetKind.Group.CARTOON));
         if (s.visitorsPixel) kinds.addAll(PetKind.inGroup(PetKind.Group.PIXEL));
+        if (s.visitorsCustom) kinds.addAll(PetKind.inGroup(PetKind.Group.CUSTOM));
         return kinds;
     }
 }

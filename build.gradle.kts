@@ -132,6 +132,7 @@ intellijPlatformTesting {
 //                    -PpetsDebugWindowSize=1280x800        with petsDebugDir: resize the window content to that size
 //                    -PpetsDebugToolWindow=Terminal        with petsDebugDir: tool window to open (default Problems View)
 //                    -PpetsDebugOpenFile=src/Main.java     with petsDebugDir: file to show in the editor
+//   ./gradlew runIde -PcustomPetsDir=<dir>        reads and imports custom pets there instead of ~/.code-gschpaenli/custom-pets
 //   ./gradlew runIde -PpetsPerfLog=<file>         runs an ~11 minute benchmark (pets off / 1 / 6 pets at 30 and 60 fps),
 //                                                 appends the results to <file> and closes the IDE (overlay/PerfProbe)
 val openProject = providers.gradleProperty("openProject")
@@ -141,6 +142,7 @@ val petsDebugWindowSize = providers.gradleProperty("petsDebugWindowSize")
 val petsDebugToolWindow = providers.gradleProperty("petsDebugToolWindow")
 val petsDebugOpenFile = providers.gradleProperty("petsDebugOpenFile")
 val petsPerfLog = providers.gradleProperty("petsPerfLog")
+val customPetsDir = providers.gradleProperty("customPetsDir")
 tasks.withType<RunIdeTask>().configureEach {
     // The lambdas below must capture only these local providers, not the script-level vals: reading a script-level val
     // captures the Gradle script object, which the configuration cache cannot serialize ("BUILD FAILED" after every run).
@@ -150,10 +152,12 @@ tasks.withType<RunIdeTask>().configureEach {
     val debugToolWindow = petsDebugToolWindow
     val debugOpenFile = petsDebugOpenFile
     val perfLog = petsPerfLog
+    val customPets = customPetsDir
     val projectToOpen = openProject
     jvmArgumentProviders += CommandLineArgumentProvider {
         buildList {
             add("-Dide.show.tips.on.startup.default.value=false")
+            if (customPets.isPresent) add("-Dcodegschpaenli.customPetsDir=${customPets.get()}")
             if (debugDir.isPresent) {
                 add("-Dcodegschpaenli.debug.snapshotDir=${debugDir.get()}")
                 add("-Dcodegschpaenli.debug.pets=6")
