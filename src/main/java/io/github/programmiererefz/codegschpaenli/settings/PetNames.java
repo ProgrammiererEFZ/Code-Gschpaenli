@@ -71,6 +71,7 @@ public final class PetNames {
     private static final List<String> WOLF = List.of("Luna", "Shadow", "Timber", "Koda", "Nova", "Fang", "Echo");
     private static final List<String> LEMUR = List.of("Maki", "Katta", "Tamarind", "Baobab", "Ringlet", "Solstice", "Mada");
     private static final List<String> MOLE = List.of("Digby", "Molly", "Velvet", "Tunnel", "Rummage", "Burrows", "Mound");
+    private static final List<String> DRAGON = List.of("Ember", "Sparky", "Cinder", "Scorch", "Pebble", "Kindle", "Smudge");
 
     private PetNames() {
     }
@@ -132,6 +133,7 @@ public final class PetNames {
             case "WOLF" -> WOLF;
             case "LEMUR" -> LEMUR;
             case "MOLE" -> MOLE;
+            case "DRAGON" -> DRAGON;
             default -> COMMON;
         };
         ThreadLocalRandom r = ThreadLocalRandom.current();
@@ -197,6 +199,7 @@ public final class PetNames {
             case "WOLF" -> "*tilts head back* Awoo! The pack is all here, and so is the green build.";
             case "LEMUR" -> "*curls tail into a question mark* Got a question? I've got rings of experience.";
             case "MOLE" -> "*pops out of a mound* Hi! Can't see a thing, but I can smell a bug three files deep.";
+            case "DRAGON" -> "*puffs a tiny smoke ring* Rawr! I'm small, but I can still roast your legacy code.";
             default -> "Hello!";
         };
     }
